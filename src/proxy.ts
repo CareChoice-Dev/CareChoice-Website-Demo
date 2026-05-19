@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { detectLocale } from './middleware-helpers'
+import { detectLocale } from './proxy-helpers'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const locale = detectLocale(request.nextUrl.pathname)
   const response = NextResponse.next()
   response.headers.set('x-locale', locale)

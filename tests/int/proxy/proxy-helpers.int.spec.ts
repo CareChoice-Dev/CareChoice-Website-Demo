@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { detectLocale } from '@/middleware-helpers'
+import { detectLocale } from '@/proxy-helpers'
 
 describe('detectLocale', () => {
   it('returns en for / path', () => {
