@@ -1,0 +1,18 @@
+/* Source Sans 3 — CareChoice brand typeface (variable font, ships local). */
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('/fonts/SourceSans3-VariableFont_wght.ttf') format('truetype-variations'),
+       url('/fonts/SourceSans3-VariableFont_wght.ttf') format('truetype');
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('/fonts/SourceSans3-Italic-VariableFont_wght.ttf') format('truetype-variations'),
+       url('/fonts/SourceSans3-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+}

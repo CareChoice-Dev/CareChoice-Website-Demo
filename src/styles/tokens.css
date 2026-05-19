@@ -1,0 +1,165 @@
+/* ============================================================
+   CareChoice Design System v1.0 — Design Tokens
+   Source: design-reference/carechoice-design-system/project/colors_and_type.css
+   Accessibility adaptations marked with A11Y-ADAPT comments.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* COLOUR — Brand (fixed palette, no tints, no gradients) */
+  --cc-magenta:     #FF008C;
+  --cc-magenta-60:  #FF82BE;
+  --cc-pms-675:     #C8008C;
+  --cc-black:       #000000;
+  --cc-white:       #FFFFFF;
+
+  /* COLOUR — Semantic */
+  --cc-bg:           var(--cc-white);
+  --cc-fg:           var(--cc-black);
+  --cc-fg-muted:     #6b6b6b;
+  --cc-border:       var(--cc-black);
+  --cc-surface:      var(--cc-white);
+  --cc-surface-alt:  #fafafa;
+  --cc-surface-pink: #FFE5F1;
+  --cc-code-bg:      #f6f6f6;
+
+  --cc-accent:        var(--cc-magenta);
+  --cc-accent-hover:  var(--cc-pms-675);
+  --cc-accent-soft:   var(--cc-magenta-60);
+
+  --cc-on-accent:     var(--cc-white);
+  --cc-on-dark:       var(--cc-white);
+  --cc-on-light:      var(--cc-black);
+
+  /* TYPOGRAPHY — Families */
+  --cc-font-sans: 'Source Sans 3', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --cc-font-mono: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+
+  /* TYPOGRAPHY — Weights */
+  --cc-w-light:    300;
+  --cc-w-regular:  400;
+  --cc-w-semibold: 600;
+  --cc-w-bold:     700;
+
+  /* TYPOGRAPHY — Metrics */
+  --cc-tracking-tight:  -0.03em;
+  --cc-tracking-normal:  0;
+  --cc-tracking-wide:    0.05em;
+  --cc-tracking-eyebrow: 0.08em;
+
+  --cc-leading-headline: 0.9;
+  --cc-leading-tight:    1.2;
+  --cc-leading-body:     1.55;
+  --cc-leading-loose:    1.7;
+
+  /* TYPOGRAPHY — Sizes */
+  --cc-fs-display-xl: clamp(48px, 8vw, 112px);
+  --cc-fs-display-lg: clamp(36px, 5vw, 64px);
+  --cc-fs-display-md: clamp(24px, 3vw, 36px);
+  --cc-fs-display-sm: 24px;
+  --cc-fs-body-lg:    20px;
+  --cc-fs-body:       17px;
+  --cc-fs-body-sm:    14px;
+  --cc-fs-utility:    16px;
+  --cc-fs-eyebrow:    13px;
+  --cc-fs-mono:       13px;
+
+  /* BORDER — Signature outlined-grid system */
+  --cc-border-w:    7px;
+  --cc-border-w-sm: 4px;
+  --cc-border-w-xs: 2px;
+
+  --cc-radius:      0;
+
+  /* SPACING — 8pt scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  /* ELEVATION — hard offset shadows only */
+  --cc-shadow-btn-hover: 4px 4px 0 var(--cc-black);
+  --cc-shadow-card:      6px 6px 0 var(--cc-black);
+}
+
+/* ============================================================
+   SEMANTIC DEFAULTS
+   ============================================================ */
+
+body {
+  font-family: var(--cc-font-sans);
+  /* A11Y-ADAPT: Brand spec defaults body to Light 300; we use Regular 400 site-wide
+     for WCAG 2.2 AA legibility for low-vision and older readers. Light 300 stays
+     available for very-large display only via utility class. */
+  font-weight: var(--cc-w-regular);
+  font-size: var(--cc-fs-body);
+  line-height: var(--cc-leading-body);
+  color: var(--cc-fg);
+  background: var(--cc-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--cc-font-sans);
+  font-weight: var(--cc-w-bold);
+  letter-spacing: var(--cc-tracking-tight);
+  line-height: var(--cc-leading-headline);
+  color: inherit;
+}
+
+h1 { font-size: var(--cc-fs-display-xl); }
+h2 { font-size: var(--cc-fs-display-lg); }
+h3 { font-size: var(--cc-fs-display-md); }
+h4 { font-size: var(--cc-fs-display-sm); line-height: var(--cc-leading-tight); }
+
+p {
+  /* A11Y-ADAPT: Regular 400 (not Light 300 per brand spec). See body comment. */
+  font-weight: var(--cc-w-regular);
+  font-size: var(--cc-fs-body);
+  line-height: var(--cc-leading-body);
+  max-width: 65ch;
+}
+
+strong, b { font-weight: var(--cc-w-semibold); }
+
+code, pre, .mono {
+  font-family: var(--cc-font-mono);
+  font-size: var(--cc-fs-mono);
+}
+
+.eyebrow {
+  font-size: var(--cc-fs-eyebrow);
+  font-weight: var(--cc-w-semibold);
+  letter-spacing: var(--cc-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.utility {
+  font-weight: var(--cc-w-semibold);
+  font-size: var(--cc-fs-utility);
+}
+
+.on-color, [data-on-color="true"] {
+  font-weight: var(--cc-w-regular);
+}
+
+/* A11Y-ADAPT: small magenta text uses PMS-675 not magenta to meet WCAG 2.2 AA
+   contrast at sub-18.66pt or sub-24pt-bold sizes. Brand-allowed alt accent. */
+.text-magenta-small {
+  color: var(--cc-pms-675);
+}
+
+/* Respect reduced motion globally — brand spec calls for this. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
