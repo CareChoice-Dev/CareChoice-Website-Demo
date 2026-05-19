@@ -1,16 +1,16 @@
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { FlatCompat } from '@eslint/eslintrc'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals'
+import nextTypeScript from 'eslint-config-next/typescript'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...nextCoreWebVitals,
+  ...nextTypeScript,
+  // jsx-a11y plugin is already registered by eslint-config-next; here we
+  // upgrade the rule set to the plugin's recommended preset.
+  {
+    name: 'jsx-a11y/recommended',
+    rules: jsxA11y.flatConfigs.recommended.rules,
+  },
   {
     rules: {
       '@typescript-eslint/ban-ts-comment': 'warn',
