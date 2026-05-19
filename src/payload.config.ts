@@ -19,6 +19,16 @@ export default buildConfig({
     },
   },
   collections: [Users, Media],
+  localization: {
+    locales: [
+      { label: 'English',               code: 'en' },
+      { label: 'English (Easy Read)',   code: 'en-easy-read' },
+      { label: 'Vietnamese',            code: 'vi' },
+      { label: 'Mandarin (Simplified)', code: 'zh' },
+    ],
+    defaultLocale: 'en',
+    fallback: true,
+  },
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
