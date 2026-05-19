@@ -32,8 +32,8 @@
     },
     "target": "ES2022",
     "noFallthroughCasesInSwitch": true,
-    // "noUnusedLocals": true, // Disabled: scaffold code (src/app/(frontend)/page.tsx imports React) triggers this. Re-enable once scaffold is replaced in Task 32.
-    // "noUnusedParameters": true, // Disabled: scaffold e2e tests (tests/e2e/*.spec.ts) and src/app/my-route trigger this. Re-enable once scaffold tests are replaced.
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": [
