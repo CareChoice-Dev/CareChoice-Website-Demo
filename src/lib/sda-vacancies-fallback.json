@@ -1,0 +1,12 @@
+{
+  "vacancies": [
+    { "id": "demo-001", "name": "Brunswick Quiet Home",     "activeBeds": 3, "occupiedBeds": 2, "availableBeds": 1 },
+    { "id": "demo-002", "name": "Geelong Family Home",      "activeBeds": 4, "occupiedBeds": 1, "availableBeds": 3 },
+    { "id": "demo-003", "name": "St Kilda Community Home",  "activeBeds": 3, "occupiedBeds": 3, "availableBeds": 0 },
+    { "id": "demo-004", "name": "Werribee Lakeside Home",   "activeBeds": 5, "occupiedBeds": 2, "availableBeds": 3 },
+    { "id": "demo-005", "name": "Footscray West Home",      "activeBeds": 3, "occupiedBeds": 0, "availableBeds": 3 },
+    { "id": "demo-006", "name": "Frankston Beach Home",     "activeBeds": 4, "occupiedBeds": 3, "availableBeds": 1 },
+    { "id": "demo-007", "name": "Coburg Garden Home",       "activeBeds": 3, "occupiedBeds": 1, "availableBeds": 2 },
+    { "id": "demo-008", "name": "Sunshine North Home",      "activeBeds": 4, "occupiedBeds": 4, "availableBeds": 0 }
+  ]
+}

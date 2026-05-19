@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { runQuery } from '@/lib/salesforce'
 import { mapSiteRecord, type SiteRecord } from './mapper'
+import fallback from '@/lib/sda-vacancies-fallback.json'
 
 export const revalidate = 600
 
@@ -24,15 +25,11 @@ export async function GET() {
       fetchedAt: new Date().toISOString(),
     })
   } catch (error) {
-    console.error('[sda-vacancies] Salesforce fetch failed:', error)
-    return NextResponse.json(
-      {
-        vacancies: [],
-        source: 'error',
-        fetchedAt: new Date().toISOString(),
-        error: error instanceof Error ? error.message : 'unknown',
-      },
-      { status: 500 },
-    )
+    console.error('[sda-vacancies] Salesforce unreachable; using fallback:', error)
+    return NextResponse.json({
+      vacancies: fallback.vacancies,
+      source: 'fallback',
+      fetchedAt: new Date().toISOString(),
+    })
   }
 }
