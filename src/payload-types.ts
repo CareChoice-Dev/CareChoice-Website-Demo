@@ -69,6 +69,13 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    pages: Page;
+    services: Service;
+    'case-studies': CaseStudy;
+    news: News;
+    'staff-profiles': StaffProfile;
+    'audience-pathways': AudiencePathway;
+    'job-listings': JobListing;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,18 +85,40 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
+    news: NewsSelect<false> | NewsSelect<true>;
+    'staff-profiles': StaffProfilesSelect<false> | StaffProfilesSelect<true>;
+    'audience-pathways': AudiencePathwaysSelect<false> | AudiencePathwaysSelect<true>;
+    'job-listings': JobListingsSelect<false> | JobListingsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
-  fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
-  locale: null;
+  fallbackLocale:
+    | ('false' | 'none' | 'null')
+    | false
+    | null
+    | ('en' | 'en-easy-read' | 'vi' | 'zh')
+    | ('en' | 'en-easy-read' | 'vi' | 'zh')[];
+  globals: {
+    navigation: Navigation;
+    'site-settings': SiteSetting;
+    'sda-homes-page': SdaHomesPage;
+    'emergency-banner': EmergencyBanner;
+  };
+  globalsSelect: {
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'sda-homes-page': SdaHomesPageSelect<false> | SdaHomesPageSelect<true>;
+    'emergency-banner': EmergencyBannerSelect<false> | EmergencyBannerSelect<true>;
+  };
+  locale: 'en' | 'en-easy-read' | 'vi' | 'zh';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -122,7 +151,9 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
+  role: 'admin' | 'editor' | 'publisher' | 'translator';
+  name?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -147,8 +178,20 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
+  /**
+   * Required for accessibility. For decorative images, write a short description; never leave blank.
+   */
   alt: string;
+  caption?: string | null;
+  /**
+   * Photographer or source attribution.
+   */
+  credit?: string | null;
+  /**
+   * Set true only for purely decorative images. Even then, alt text describing the asset is required for catalogue search.
+   */
+  isDecorative?: boolean | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -160,13 +203,255 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  /**
+   * URL path segment. Lower-case, hyphenated.
+   */
+  slug: string;
+  heroImage?: (number | null) | Media;
+  /**
+   * Short lead paragraph. Headlines end with a full stop.
+   */
+  intro?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  title: string;
+  slug: string;
+  category: 'disability-services' | 'complex-care' | 'specialist-services' | 'housing';
+  fundingTypes?: ('ndis' | 'tac' | 'worksafe' | 'private')[] | null;
+  heroImage?: (number | null) | Media;
+  intro?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  relatedServices?: (number | Service)[] | null;
+  /**
+   * Optional downloadable Easy Read PDF version.
+   */
+  easyReadPdf?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-studies".
+ */
+export interface CaseStudy {
+  id: number;
+  title: string;
+  slug: string;
+  /**
+   * Full name or pseudonym. Mark consent below.
+   */
+  participantName: string;
+  /**
+   * Confirm written consent on file before publishing.
+   */
+  consentRecorded: boolean;
+  heroImage?: (number | null) | Media;
+  summary?: string | null;
+  servicesUsed?: (number | Service)[] | null;
+  outcomeMetrics?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  quote?: string | null;
+  story?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news".
+ */
+export interface News {
+  id: number;
+  title: string;
+  slug: string;
+  publishDate: string;
+  author?: string | null;
+  heroImage?: (number | null) | Media;
+  excerpt?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  tags?: ('ndis' | 'housing' | 'community' | 'sector' | 'carechoice')[] | null;
+  relatedServices?: (number | Service)[] | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "staff-profiles".
+ */
+export interface StaffProfile {
+  id: number;
+  name: string;
+  role: string;
+  bio?: string | null;
+  photo?: (number | null) | Media;
+  specialties?: ('sil' | 'respite' | 'community-access' | 'pbs' | 'complex-care')[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audience-pathways".
+ */
+export interface AudiencePathway {
+  id: number;
+  label: string;
+  description?: string | null;
+  targetUrl: string;
+  /**
+   * Lucide icon name (e.g. "users", "briefcase").
+   */
+  icon?: string | null;
+  image?: (number | null) | Media;
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-listings".
+ */
+export interface JobListing {
+  id: number;
+  title: string;
+  slug: string;
+  location?: string | null;
+  employmentType?: ('full-time' | 'part-time' | 'casual' | 'contract') | null;
+  summary?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,20 +468,48 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'case-studies';
+        value: number | CaseStudy;
+      } | null)
+    | ({
+        relationTo: 'news';
+        value: number | News;
+      } | null)
+    | ({
+        relationTo: 'staff-profiles';
+        value: number | StaffProfile;
+      } | null)
+    | ({
+        relationTo: 'audience-pathways';
+        value: number | AudiencePathway;
+      } | null)
+    | ({
+        relationTo: 'job-listings';
+        value: number | JobListing;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -206,10 +519,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -229,7 +542,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -240,6 +553,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -263,6 +578,9 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
+  credit?: T;
+  isDecorative?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -274,6 +592,163 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  heroImage?: T;
+  intro?: T;
+  content?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  category?: T;
+  fundingTypes?: T;
+  heroImage?: T;
+  intro?: T;
+  content?: T;
+  relatedServices?: T;
+  easyReadPdf?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-studies_select".
+ */
+export interface CaseStudiesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  participantName?: T;
+  consentRecorded?: T;
+  heroImage?: T;
+  summary?: T;
+  servicesUsed?: T;
+  outcomeMetrics?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  quote?: T;
+  story?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news_select".
+ */
+export interface NewsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  publishDate?: T;
+  author?: T;
+  heroImage?: T;
+  excerpt?: T;
+  body?: T;
+  tags?: T;
+  relatedServices?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "staff-profiles_select".
+ */
+export interface StaffProfilesSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  bio?: T;
+  photo?: T;
+  specialties?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audience-pathways_select".
+ */
+export interface AudiencePathwaysSelect<T extends boolean = true> {
+  label?: T;
+  description?: T;
+  targetUrl?: T;
+  icon?: T;
+  image?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-listings_select".
+ */
+export interface JobListingsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  location?: T;
+  employmentType?: T;
+  summary?: T;
+  body?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -314,6 +789,176 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation".
+ */
+export interface Navigation {
+  id: number;
+  topNav?:
+    | {
+        label: string;
+        url: string;
+        /**
+         * Render as primary button (e.g. "Make an enquiry.").
+         */
+        highlightAsCta?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerColumns?:
+    | {
+        heading: string;
+        links?:
+          | {
+              label: string;
+              url: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  acknowledgementOfCountry?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  siteTitle?: string | null;
+  defaultOgImage?: (number | null) | Media;
+  /**
+   * Australian format with spaces, no parens.
+   */
+  phoneNumber?: string | null;
+  contactEmail?: string | null;
+  /**
+   * Salesforce Embedded Service Deployment ID (from Cam in week 2).
+   */
+  agentforceDeploymentId?: string | null;
+  agentforceOrgId?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sda-homes-page".
+ */
+export interface SdaHomesPage {
+  id: number;
+  title: string;
+  intro?: string | null;
+  filterLabels?: {
+    region?: string | null;
+    design?: string | null;
+    bedrooms?: string | null;
+    availability?: string | null;
+  };
+  emptyStateMessage?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "emergency-banner".
+ */
+export interface EmergencyBanner {
+  id: number;
+  /**
+   * Toggle on to display the banner site-wide.
+   */
+  active?: boolean | null;
+  message?: string | null;
+  severity?: ('info' | 'warning' | 'alert') | null;
+  linkUrl?: string | null;
+  linkLabel?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation_select".
+ */
+export interface NavigationSelect<T extends boolean = true> {
+  topNav?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        highlightAsCta?: T;
+        id?: T;
+      };
+  footerColumns?:
+    | T
+    | {
+        heading?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  acknowledgementOfCountry?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteTitle?: T;
+  defaultOgImage?: T;
+  phoneNumber?: T;
+  contactEmail?: T;
+  agentforceDeploymentId?: T;
+  agentforceOrgId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sda-homes-page_select".
+ */
+export interface SdaHomesPageSelect<T extends boolean = true> {
+  title?: T;
+  intro?: T;
+  filterLabels?:
+    | T
+    | {
+        region?: T;
+        design?: T;
+        bedrooms?: T;
+        availability?: T;
+      };
+  emptyStateMessage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "emergency-banner_select".
+ */
+export interface EmergencyBannerSelect<T extends boolean = true> {
+  active?: T;
+  message?: T;
+  severity?: T;
+  linkUrl?: T;
+  linkLabel?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
