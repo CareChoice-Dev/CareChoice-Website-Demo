@@ -14,6 +14,7 @@ import { News } from './collections/News'
 import { StaffProfiles } from './collections/StaffProfiles'
 import { AudiencePathways } from './collections/AudiencePathways'
 import { JobListings } from './collections/JobListings'
+import { Navigation } from './globals/Navigation'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,6 +27,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Pages, Services, CaseStudies, News, StaffProfiles, AudiencePathways, JobListings],
+  globals: [Navigation],
   localization: {
     locales: [
       { label: 'English',               code: 'en' },
