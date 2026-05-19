@@ -1,67 +1,74 @@
-# Payload Blank Template
+# CareChoice Demo
 
-This template comes configured with the bare minimum to get started on anything you need.
+Working demonstration of a redesigned CareChoice website for executive buy-in.
 
-## Quick start
+- **Spec:** `../docs/superpowers/specs/2026-05-19-carechoice-demo-design.md`
+- **Plan:** `../docs/superpowers/plans/2026-05-19-week-1-foundation.md`
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+## Stack
 
-## Quick Start - local setup
+- Next.js 15 (App Router) + Payload 3
+- Postgres (Neon free tier in demo)
+- TypeScript, Tailwind CSS v3, Source Sans 3 (CareChoice brand)
+- Salesforce UAT integration (OAuth Client Credentials)
+- Deployed to Vercel Hobby
 
-To spin up this template locally, follow these steps:
+## Local development
 
-### Clone
+```bash
+# 1. Copy .env.example to .env.local and fill in values
+cp .env.example .env.local
+# Edit .env.local — see comments
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+# 2. Install dependencies (run once)
+npm install
 
-### Development
+# 3. Run dev server
+npm run dev
+```
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+Visit:
+- http://localhost:3000/ — public site
+- http://localhost:3000/admin — Payload admin
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+## Useful commands
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+```bash
+npm run dev               # Dev server
+npm run build             # Production build
+npm run start             # Run production build locally
+npm run lint              # ESLint (including jsx-a11y)
+npm run test:int          # Vitest integration tests
+npm run test:e2e          # Playwright e2e
+npm run lh                # Lighthouse CI (requires polished build)
+npm run generate:types    # Regenerate Payload types from collections + globals
+npm run generate:importmap
+```
 
-#### Docker (Optional)
+## Environment variables
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+See `.env.example` for the full list. Required:
+- `DATABASE_URL` — Neon Postgres connection string
+- `PAYLOAD_SECRET` — random 32+ char string
+- `SALESFORCE_*` — UAT Connected App credentials
 
-To do so, follow these steps:
+## Salesforce schema
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+Discovery and field reference: `docs/salesforce-schema.md`
 
-## How it works
+## Brand
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+CareChoice Design System v1.0 — see `../design-reference/carechoice-design-system/README.md`.
 
-### Collections
+Three documented WCAG 2.2 AA adaptations from the brand spec are commented inline in `src/styles/tokens.css` (search `A11Y-ADAPT`).
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+## Locale routing
 
-- #### Users (Authentication)
+Currently a placeholder. `src/middleware.ts` detects `/`, `/vi/...`, `/zh/...`, `/easy-read/...` and sets an `x-locale` header that pages read via `next/headers`. Full localized routing (with `[locale]` segments rendering Payload content per locale) lands in Plan 2.
 
-  Users are auth-enabled collections that have access to the admin panel.
+## Demo deployment
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/3.x/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
-
-- #### Media
-
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
-
-### Docker
-
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
-
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
-
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
-
-## Questions
-
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+- URL: `https://carechoice-demo.vercel.app` (when Task 35 is complete)
+- Hosting: Vercel Hobby (non-commercial)
+- Database: Neon free tier (0.5GB, scales to zero)
+- Demo software cost: **$0**
