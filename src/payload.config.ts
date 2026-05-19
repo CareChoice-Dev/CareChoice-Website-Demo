@@ -16,6 +16,8 @@ import { AudiencePathways } from './collections/AudiencePathways'
 import { JobListings } from './collections/JobListings'
 import { Navigation } from './globals/Navigation'
 import { SiteSettings } from './globals/SiteSettings'
+import { SDAHomesPage } from './globals/SDAHomesPage'
+import { EmergencyBanner } from './globals/EmergencyBanner'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,7 +30,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Pages, Services, CaseStudies, News, StaffProfiles, AudiencePathways, JobListings],
-  globals: [Navigation, SiteSettings],
+  globals: [Navigation, SiteSettings, SDAHomesPage, EmergencyBanner],
   localization: {
     locales: [
       { label: 'English',               code: 'en' },
