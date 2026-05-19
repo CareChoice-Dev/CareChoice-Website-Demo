@@ -15,6 +15,7 @@ import { StaffProfiles } from './collections/StaffProfiles'
 import { AudiencePathways } from './collections/AudiencePathways'
 import { JobListings } from './collections/JobListings'
 import { Navigation } from './globals/Navigation'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -27,7 +28,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Pages, Services, CaseStudies, News, StaffProfiles, AudiencePathways, JobListings],
-  globals: [Navigation],
+  globals: [Navigation, SiteSettings],
   localization: {
     locales: [
       { label: 'English',               code: 'en' },
