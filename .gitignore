@@ -48,3 +48,14 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Added by CareChoice demo plan (Plan 1, Task 2 wrap-up)
+.lighthouseci/
+src/payload-types.ts
+src/payload-generated-schema.ts
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+.pnp
+/dist
