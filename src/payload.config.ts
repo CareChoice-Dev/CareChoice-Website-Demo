@@ -11,6 +11,9 @@ import { Pages } from './collections/Pages'
 import { Services } from './collections/Services'
 import { CaseStudies } from './collections/CaseStudies'
 import { News } from './collections/News'
+import { StaffProfiles } from './collections/StaffProfiles'
+import { AudiencePathways } from './collections/AudiencePathways'
+import { JobListings } from './collections/JobListings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Services, CaseStudies, News],
+  collections: [Users, Media, Pages, Services, CaseStudies, News, StaffProfiles, AudiencePathways, JobListings],
   localization: {
     locales: [
       { label: 'English',               code: 'en' },
