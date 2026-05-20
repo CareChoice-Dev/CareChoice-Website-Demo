@@ -27,6 +27,12 @@ export interface SiteRecord {
   [key: string]: unknown
 }
 
+export interface SDAPhotoRef {
+  url: string
+  alt: string
+  isHero: boolean
+}
+
 export interface SDAVacancyAddress {
   line1: string | null
   line2: string | null
@@ -54,6 +60,7 @@ export interface SDAVacancy {
   amenities: string[]
   accessibility: string[]
   sharepointUrl: string | null
+  photos: SDAPhotoRef[]
 }
 
 function splitMultipicklist(value: string | null | undefined): string[] {
@@ -101,5 +108,6 @@ export function mapSiteRecord(record: SiteRecord): SDAVacancy {
     amenities: splitMultipicklist(record.enrtcr__Amenities__c),
     accessibility: splitMultipicklist(record.Accessibility__c),
     sharepointUrl: record.Sharepoint_Direct_Link__c ?? null,
+    photos: [],
   }
 }

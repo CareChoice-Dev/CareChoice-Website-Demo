@@ -149,4 +149,10 @@ describe('mapSiteRecord', () => {
     expect(result.description).toBe('A welcoming home.')
     expect(result.sharepointUrl).toBe('https://carechoice1.sharepoint.com/sites/foo')
   })
+
+  it('exposes an empty photos array by default (photos are joined in the route, not the mapper)', () => {
+    const sf = { Id: '001kk', Name: 'Test' }
+    const result = mapSiteRecord(sf)
+    expect(result.photos).toEqual([])
+  })
 })
