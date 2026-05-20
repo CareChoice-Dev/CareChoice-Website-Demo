@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { Button } from '@/components/primitives/Button'
@@ -31,7 +32,7 @@ export async function Header({ locale }: { locale: PayloadLocale }) {
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-4 flex flex-col gap-3">
         <div className="flex items-center justify-between gap-6">
           <Link href="/" className="flex items-center gap-2 no-underline" aria-label="CareChoice home">
-            <img src="/brand/logo-magenta.svg" alt="" width={120} height={32} className="h-8 w-auto" />
+            <Image src="/brand/logo-magenta.svg" alt="" width={120} height={32} className="h-8 w-auto" priority />
             <span className="sr-only">CareChoice</span>
           </Link>
 
