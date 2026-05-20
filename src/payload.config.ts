@@ -14,6 +14,7 @@ import { News } from './collections/News'
 import { StaffProfiles } from './collections/StaffProfiles'
 import { AudiencePathways } from './collections/AudiencePathways'
 import { JobListings } from './collections/JobListings'
+import { SDAPhotos } from './collections/SDAPhotos'
 import { Navigation } from './globals/Navigation'
 import { SiteSettings } from './globals/SiteSettings'
 import { SDAHomesPage } from './globals/SDAHomesPage'
@@ -29,7 +30,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Services, CaseStudies, News, StaffProfiles, AudiencePathways, JobListings],
+  collections: [Users, Media, Pages, Services, CaseStudies, News, StaffProfiles, AudiencePathways, JobListings, SDAPhotos],
   globals: [Navigation, SiteSettings, SDAHomesPage, EmergencyBanner],
   localization: {
     locales: [

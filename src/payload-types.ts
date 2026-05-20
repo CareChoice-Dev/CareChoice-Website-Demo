@@ -76,6 +76,7 @@ export interface Config {
     'staff-profiles': StaffProfile;
     'audience-pathways': AudiencePathway;
     'job-listings': JobListing;
+    'sda-photos': SdaPhoto;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     'staff-profiles': StaffProfilesSelect<false> | StaffProfilesSelect<true>;
     'audience-pathways': AudiencePathwaysSelect<false> | AudiencePathwaysSelect<true>;
     'job-listings': JobListingsSelect<false> | JobListingsSelect<true>;
+    'sda-photos': SdaPhotosSelect<false> | SdaPhotosSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -448,6 +450,36 @@ export interface JobListing {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sda-photos".
+ */
+export interface SdaPhoto {
+  id: number;
+  /**
+   * Pick a site from Salesforce. The ID is stored; the name is denormalised for display.
+   */
+  siteId: string;
+  /**
+   * Auto-filled by the Site picker when you choose a site.
+   */
+  siteName?: string | null;
+  /**
+   * Upload the photo to the Media collection. Alt text is required there.
+   */
+  media: number | Media;
+  /**
+   * Tick to use this as the main hero image for the site. Only the first hero per site is shown.
+   */
+  isHero?: boolean | null;
+  /**
+   * Lower numbers appear first. Hero photo overrides order.
+   */
+  displayOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -505,6 +537,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'job-listings';
         value: number | JobListing;
+      } | null)
+    | ({
+        relationTo: 'sda-photos';
+        value: number | SdaPhoto;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -749,6 +785,20 @@ export interface JobListingsSelect<T extends boolean = true> {
   body?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sda-photos_select".
+ */
+export interface SdaPhotosSelect<T extends boolean = true> {
+  siteId?: T;
+  siteName?: T;
+  media?: T;
+  isHero?: T;
+  displayOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
