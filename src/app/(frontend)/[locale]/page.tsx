@@ -1,4 +1,5 @@
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
+import { Link } from '@/components/primitives/Link'
 import { notFound } from 'next/navigation'
 
 export default async function HomePage({
@@ -16,11 +17,11 @@ export default async function HomePage({
       <p>Locale: <strong>{locale}</strong>.</p>
       <p>
         Component library demo:{' '}
-        <a href={`/${urlLocale}/dev/components`}>/{urlLocale}/dev/components</a>.
+        <Link href="/dev/components">/{urlLocale}/dev/components</Link>.
       </p>
       <p>
         Live SDA homes:{' '}
-        <a href={`/${urlLocale}/find-a-home`}>/{urlLocale}/find-a-home</a>.
+        <Link href="/find-a-home">/{urlLocale}/find-a-home</Link>.
       </p>
     </div>
   )
