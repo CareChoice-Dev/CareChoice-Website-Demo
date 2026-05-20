@@ -4,6 +4,7 @@ import { findOneServiceBySlug } from '@/lib/payload-client'
 import { HeadlineBlock } from '@/components/blocks/HeadlineBlock'
 import { Tag } from '@/components/primitives/Tag'
 import { Section } from '@/components/primitives/Section'
+import { RichText } from '@/components/primitives/RichText'
 
 export default async function ServiceDetail({
   params,
@@ -41,9 +42,7 @@ export default async function ServiceDetail({
       )}
 
       <Section number={1} title="About this service.">
-        <p className="text-base leading-relaxed max-w-prose">
-          Detailed content rendering for the Lexical richText `content` field will land in Week 3.
-        </p>
+        <RichText value={service.content} />
       </Section>
     </article>
   )
