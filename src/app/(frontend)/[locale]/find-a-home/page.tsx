@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
 import { isUrlSlug } from '@/lib/locale'
 import type { SDAVacancy } from '@/components/sda/types'
-import { SDAGrid } from '@/components/sda/SDAGrid'
+import { SDAGridMapToggle } from '@/components/sda/SDAGridMapToggle'
+import { geocodeAddress } from '@/lib/geocode'
 
 async function fetchAllVacancies(): Promise<{
   vacancies: SDAVacancy[]
@@ -20,6 +21,21 @@ async function fetchAllVacancies(): Promise<{
   return res.json()
 }
 
+async function attachGeoFallback(vacancies: SDAVacancy[]): Promise<SDAVacancy[]> {
+  // For records where Salesforce gave us no geo, try to geocode the formatted address.
+  // Throttle to ~1 req/sec via sequential awaits — Nominatim's free tier requires this.
+  const enriched: SDAVacancy[] = []
+  for (const v of vacancies) {
+    if (v.geo || !v.address.formatted) {
+      enriched.push(v)
+      continue
+    }
+    const geo = await geocodeAddress(v.address.formatted + ', Australia')
+    enriched.push(geo ? { ...v, geo } : v)
+  }
+  return enriched
+}
+
 export default async function FindAHome({
   params,
 }: {
@@ -29,24 +45,27 @@ export default async function FindAHome({
   if (!isUrlSlug(urlLocale)) notFound()
 
   const { vacancies, source } = await fetchAllVacancies()
+  const enriched = await attachGeoFallback(vacancies)
   const hrefPrefix = `/${urlLocale}`
 
   return (
     <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-6">
-      <header>
+      <header className="flex flex-col gap-2">
         <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
           Find a home.
         </h1>
-        <p className="text-lg mt-2 max-w-prose">
+        <p className="text-lg max-w-prose">
           Vacancies updated every 10 minutes from our Salesforce site directory.
+          {enriched.length > 0 && ` ${enriched.length} homes in this view.`}
         </p>
       </header>
 
-      <SDAGrid vacancies={vacancies} hrefPrefix={hrefPrefix} />
+      <SDAGridMapToggle vacancies={enriched} hrefPrefix={hrefPrefix} />
 
       {source !== 'salesforce' && (
         <p className="text-xs text-cc-fg-muted">
-          Source: {source}. Salesforce connection is currently {source === 'fallback' ? 'unavailable; showing seeded data' : 'in error'}.
+          Source: {source}. Salesforce connection is currently
+          {source === 'fallback' ? ' unavailable; showing seeded data' : ' in error'}.
         </p>
       )}
     </div>

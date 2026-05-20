@@ -1,1 +1,52 @@
-{}
+{
+  "28 eaton road, mount duneed vic 3216, australia": {
+    "lat": -38.2199324,
+    "lng": 144.3239638
+  },
+  "32 kingsclere avenue, keysborough vic 3173, australia": {
+    "lat": -37.9820673,
+    "lng": 145.167685
+  },
+  "52 paprika parade, mickleham vic 3064, australia": {
+    "lat": -37.5473239,
+    "lng": 144.8940947
+  },
+  "14 boxer drive, wyndham vale 3024, australia": {
+    "lat": -37.8669792,
+    "lng": 144.6206312
+  },
+  "11 sorrenberg street, point cook 3030, australia": {
+    "lat": -37.9171844,
+    "lng": 144.7845261
+  },
+  "8 boxer drive, wyndham vale 3024, australia": {
+    "lat": -37.86714,
+    "lng": 144.6201866
+  },
+  "12 boxer drive, wyndham vale 3024, australia": {
+    "lat": -37.8670353,
+    "lng": 144.6204761
+  },
+  "13 rhubarb place, mickleham 3064, australia": {
+    "lat": -37.5475122,
+    "lng": 144.8914431
+  },
+  "6 satellite drive, werribee 3030, australia": {
+    "lat": -37.900459,
+    "lng": 144.5954804
+  },
+  "50 simon drive, pakenham 3810, australia": {
+    "lat": -38.0733334,
+    "lng": 145.4929606
+  },
+  "23 power road, doveton 3177, australia": {
+    "lat": -37.9963938,
+    "lng": 145.2380093
+  },
+  "u1 8 cameron way, pakenham vic 3810, australia": null,
+  "unit 2, 8 cameron way, pakenham vic 3810, australia": null,
+  "22 sullivan street, ascot victoria 3550, australia": {
+    "lat": -36.7071998,
+    "lng": 144.3229679
+  }
+}
