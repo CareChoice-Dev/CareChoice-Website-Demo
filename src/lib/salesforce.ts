@@ -74,3 +74,38 @@ export async function runQuery<T>(soql: string): Promise<T[]> {
   const data = (await response.json()) as { records: T[] }
   return data.records
 }
+
+/**
+ * Create a Salesforce record via REST API.
+ * Returns the new record's id.
+ *
+ * On auth failure: throws "Salesforce auth failed: ..."
+ * On mutation failure: throws "Salesforce mutation failed: <status> <body>"
+ */
+export async function runMutation(
+  sobject: string,
+  data: Record<string, unknown>,
+): Promise<{ id: string }> {
+  const token = await getAccessToken()
+  const instanceUrl = process.env.SALESFORCE_INSTANCE_URL!
+  const apiVersion = process.env.SALESFORCE_API_VERSION || '60.0'
+
+  const url = `${instanceUrl}/services/data/v${apiVersion}/sobjects/${sobject}/`
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+
+  if (!response.ok) {
+    const body = await response.text()
+    throw new Error(`Salesforce mutation failed: ${response.status} ${body}`)
+  }
+
+  const json = (await response.json()) as { id: string; success: boolean; errors: unknown[] }
+  return { id: json.id }
+}
