@@ -9,6 +9,32 @@ export const SDAPhotos: CollectionConfig = {
   },
   access: { read: () => true },
   versions: { drafts: { autosave: false } },
+  hooks: {
+    // The Site picker writes only `siteId`. We denormalise the site name
+    // server-side here so the admin list/title always reflects the current
+    // Salesforce name, and so we never depend on sibling-field writes from
+    // a custom client component (API stability across Payload 3.x versions).
+    beforeChange: [
+      async ({ data, req }) => {
+        if (!data?.siteId) return data
+        try {
+          const proto = req.headers.get('x-forwarded-proto') ?? 'http'
+          const host = req.headers.get('host') ?? 'localhost:3000'
+          const res = await fetch(`${proto}://${host}/api/sda-vacancies`)
+          if (res.ok) {
+            const sda = (await res.json()) as {
+              vacancies: Array<{ id: string; name: string }>
+            }
+            const match = sda.vacancies.find((v) => v.id === data.siteId)
+            if (match) data.siteName = match.name
+          }
+        } catch {
+          // Non-fatal — leave siteName as-is; admins can edit it manually.
+        }
+        return data
+      },
+    ],
+  },
   fields: [
     {
       name: 'siteId',
