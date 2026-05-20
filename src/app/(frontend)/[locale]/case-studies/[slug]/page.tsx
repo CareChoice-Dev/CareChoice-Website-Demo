@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
-import { findOneCaseStudyBySlug } from '@/lib/payload-client'
+import { findOneCaseStudyBySlug, getPayloadClient } from '@/lib/payload-client'
 import { CaseStudyHero } from '@/components/blocks/CaseStudyHero'
 import { CaseStudyPullQuote } from '@/components/blocks/CaseStudyPullQuote'
 import { OutcomeMetricsRow } from '@/components/blocks/OutcomeMetricsRow'
@@ -10,6 +10,23 @@ import { RichText } from '@/components/primitives/RichText'
 interface OutcomeMetricField {
   label: string
   value: string
+}
+
+export async function generateStaticParams() {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'case-studies',
+    limit: 50,
+    locale: 'en',
+  })
+  return result.docs
+    .filter((d): d is typeof d & { slug: string } => typeof d.slug === 'string')
+    .flatMap((d) => [
+      { locale: 'en', slug: d.slug },
+      { locale: 'vi', slug: d.slug },
+      { locale: 'zh', slug: d.slug },
+      { locale: 'easy-read', slug: d.slug },
+    ])
 }
 
 export default async function CaseStudyDetail({

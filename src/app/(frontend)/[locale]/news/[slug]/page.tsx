@@ -1,7 +1,24 @@
 import { notFound } from 'next/navigation'
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
-import { findOneNewsBySlug } from '@/lib/payload-client'
+import { findOneNewsBySlug, getPayloadClient } from '@/lib/payload-client'
 import { RichText } from '@/components/primitives/RichText'
+
+export async function generateStaticParams() {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'news',
+    limit: 50,
+    locale: 'en',
+  })
+  return result.docs
+    .filter((d): d is typeof d & { slug: string } => typeof d.slug === 'string')
+    .flatMap((d) => [
+      { locale: 'en', slug: d.slug },
+      { locale: 'vi', slug: d.slug },
+      { locale: 'zh', slug: d.slug },
+      { locale: 'easy-read', slug: d.slug },
+    ])
+}
 
 export default async function NewsArticle({
   params,

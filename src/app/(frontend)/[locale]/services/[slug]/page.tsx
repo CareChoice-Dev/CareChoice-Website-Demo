@@ -1,10 +1,27 @@
 import { notFound } from 'next/navigation'
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
-import { findOneServiceBySlug } from '@/lib/payload-client'
+import { findOneServiceBySlug, getPayloadClient } from '@/lib/payload-client'
 import { HeadlineBlock } from '@/components/blocks/HeadlineBlock'
 import { Tag } from '@/components/primitives/Tag'
 import { Section } from '@/components/primitives/Section'
 import { RichText } from '@/components/primitives/RichText'
+
+export async function generateStaticParams() {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'services',
+    limit: 50,
+    locale: 'en',
+  })
+  return result.docs
+    .filter((d): d is typeof d & { slug: string } => typeof d.slug === 'string')
+    .flatMap((d) => [
+      { locale: 'en', slug: d.slug },
+      { locale: 'vi', slug: d.slug },
+      { locale: 'zh', slug: d.slug },
+      { locale: 'easy-read', slug: d.slug },
+    ])
+}
 
 export default async function ServiceDetail({
   params,
