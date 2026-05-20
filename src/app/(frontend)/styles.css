@@ -173,3 +173,34 @@ svg {
     }
   }
 }
+
+/* ============================================================
+   EASY READ THEME — applied via <html data-easy-read="true">
+   Body 20-22px Regular, max line length 50 chars, muted brand.
+   ============================================================ */
+
+html[data-easy-read="true"] body {
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+html[data-easy-read="true"] p,
+html[data-easy-read="true"] li {
+  max-width: 50ch;
+}
+
+html[data-easy-read="true"] h1 {
+  font-size: clamp(36px, 5vw, 60px);
+}
+html[data-easy-read="true"] h2 {
+  font-size: clamp(28px, 4vw, 40px);
+}
+
+/* Reduce magenta dominance — only Tag and small accents stay magenta */
+html[data-easy-read="true"] .bg-cc-magenta:not(.cc-allow-magenta) {
+  background-color: var(--cc-white) !important;
+  color: var(--cc-black) !important;
+}
+html[data-easy-read="true"] .border-cc-magenta {
+  border-color: var(--cc-black);
+}

@@ -24,7 +24,10 @@ export default async function LocaleLayout({
   const htmlLang = htmlLangFor(payloadLocale)
 
   return (
-    <html lang={htmlLang}>
+    <html
+      lang={htmlLang}
+      data-easy-read={payloadLocale === 'en-easy-read' ? 'true' : undefined}
+    >
       <body>
         <SkipToMain />
         <A11yApplyClient />
