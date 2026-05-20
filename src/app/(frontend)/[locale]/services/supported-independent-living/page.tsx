@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
-import { findOneServiceBySlug } from '@/lib/payload-client'
+import { findOneServiceBySlug, getPayloadClient } from '@/lib/payload-client'
 import { HeadlineBlock } from '@/components/blocks/HeadlineBlock'
 import { Section } from '@/components/primitives/Section'
 import { Tag } from '@/components/primitives/Tag'
@@ -10,6 +10,7 @@ import { StepByStepBlock } from '@/components/blocks/StepByStepBlock'
 import { AccordionBlock } from '@/components/blocks/AccordionBlock'
 import { CTABlock } from '@/components/blocks/CTABlock'
 import { RichText } from '@/components/primitives/RichText'
+import { EasyReadNotice } from '@/components/primitives/EasyReadNotice'
 
 export default async function SILPage({
   params,
@@ -23,12 +24,28 @@ export default async function SILPage({
 
   const service = await findOneServiceBySlug('supported-independent-living', locale)
 
+  const isEasyRead = urlLocale === 'easy-read'
+  let hasEasyReadContent = !isEasyRead
+  if (isEasyRead) {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'services',
+      where: { slug: { equals: 'supported-independent-living' } },
+      locale: 'en-easy-read',
+      fallbackLocale: null,
+      limit: 1,
+    })
+    hasEasyReadContent = result.docs[0]?.title != null
+  }
+
   return (
     <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-12">
       <nav aria-label="Breadcrumb" className="text-sm">
         <a href={`${hrefPrefix}/`}>Home</a> ·{' '}
         <a href={`${hrefPrefix}/services`}>Our services</a> · Supported Independent Living
       </nav>
+
+      {isEasyRead && !hasEasyReadContent && <EasyReadNotice pageName="this service" />}
 
       <HeadlineBlock eyebrow="Housing" headline="Supported Independent Living.">
         <p>
