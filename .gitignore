@@ -62,3 +62,6 @@ Thumbs.db
 
 # Geocode cache — local working file; committed seed below is empty
 /data/geocode-cache.local.json
+
+# Pagefind generated search index (built at deploy time)
+/public/pagefind/
