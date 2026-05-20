@@ -4,7 +4,7 @@ import { isUrlSlug, urlSlugToLocale, htmlLangFor } from '@/lib/locale'
 import { Header } from '@/components/chrome/Header'
 import { Footer } from '@/components/chrome/Footer'
 import { SkipToMain } from '@/components/chrome/SkipToMain'
-import { ChatStub } from '@/components/chrome/ChatStub'
+import { AgentforceEmbed } from '@/components/chrome/AgentforceEmbed'
 import { A11yApplyClient } from '@/components/chrome/A11yApplyClient'
 
 export async function generateStaticParams() {
@@ -34,7 +34,7 @@ export default async function LocaleLayout({
         <Header locale={payloadLocale} />
         <main id="main">{children}</main>
         <Footer locale={payloadLocale} />
-        <ChatStub />
+        <AgentforceEmbed />
       </body>
     </html>
   )
