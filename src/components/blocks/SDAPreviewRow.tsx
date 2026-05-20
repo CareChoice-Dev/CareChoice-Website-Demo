@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import NextLink from 'next/link'
 import { headers } from 'next/headers'
 import { Module } from '@/components/primitives/Module'
@@ -35,8 +36,18 @@ export async function SDAPreviewRow({ hrefPrefix }: { hrefPrefix: string }) {
             weight="card"
             className="overflow-hidden h-full flex flex-col transition-transform duration-[0.18s] ease-out group-hover:-translate-x-[2px] group-hover:-translate-y-[2px] group-hover:shadow-hard-card motion-reduce:transition-none"
           >
-            <div className="aspect-[4/3] bg-cc-surface-pink border-b-[7px] border-cc-black flex items-center justify-center">
-              <span className="eyebrow text-cc-fg-muted">Photo TBA</span>
+            <div className="relative aspect-[4/3] bg-cc-surface-pink border-b-[7px] border-cc-black flex items-center justify-center">
+              {h.photos[0] ? (
+                <Image
+                  src={h.photos[0].url}
+                  alt={h.photos[0].alt || `Photo of ${h.name}`}
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              ) : (
+                <span className="eyebrow text-cc-fg-muted">Photo TBA</span>
+              )}
             </div>
             <div className="p-4 flex flex-col gap-2">
               <h4 className="text-lg font-bold leading-tight">{h.name}</h4>

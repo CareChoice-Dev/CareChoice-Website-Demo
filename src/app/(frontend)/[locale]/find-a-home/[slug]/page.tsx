@@ -59,10 +59,7 @@ export default async function SDADetail({
         </div>
       </header>
 
-      <SDAHeroGallery
-        homeName={home.name}
-        imageUrl={null}
-      />
+      <SDAHeroGallery homeName={home.name} photos={home.photos} />
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_360px] gap-10">
         <main className="flex flex-col gap-10">
