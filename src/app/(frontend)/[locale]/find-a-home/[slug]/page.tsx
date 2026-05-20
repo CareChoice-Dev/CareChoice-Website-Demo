@@ -1,9 +1,14 @@
 import { notFound } from 'next/navigation'
-import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
 import { headers } from 'next/headers'
-import type { SDAVacancy } from '@/app/api/sda-vacancies/mapper'
+import { isUrlSlug } from '@/lib/locale'
+import type { SDAVacancy } from '@/components/sda/types'
 import { Tag } from '@/components/primitives/Tag'
-import { Module } from '@/components/primitives/Module'
+import { Section } from '@/components/primitives/Section'
+import { SDAHeroGallery } from '@/components/sda/SDAHeroGallery'
+import { AccessibilityFeaturesGrid } from '@/components/sda/AccessibilityFeaturesGrid'
+import { SDAQuickFactsCard } from '@/components/sda/SDAQuickFactsCard'
+import { SuburbContextBlock } from '@/components/sda/SuburbContextBlock'
+import { SimilarHomesRow } from '@/components/sda/SimilarHomesRow'
 
 async function fetchVacancy(id: string): Promise<SDAVacancy | null> {
   const h = await headers()
@@ -24,69 +29,67 @@ export default async function SDADetail({
 }) {
   const { locale: urlLocale, slug } = await params
   if (!isUrlSlug(urlLocale)) notFound()
-  // Locale unused below for Week 2; will be once content is bilingual
-  void urlSlugToLocale(urlLocale)
+  const hrefPrefix = `/${urlLocale}`
 
   const home = await fetchVacancy(slug)
   if (!home) notFound()
 
   return (
-    <article className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-8">
+    <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-10">
+      <nav aria-label="Breadcrumb" className="text-sm">
+        <a href={`${hrefPrefix}/`}>Home</a> · <a href={`${hrefPrefix}/find-a-home`}>Find a home</a> · {home.name}
+      </nav>
+
       <header className="flex flex-col gap-3">
         <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
           {home.name}
         </h1>
-        <p className="text-lg text-cc-fg-muted">{home.address.formatted}</p>
+        {home.address.formatted && (
+          <p className="text-lg text-cc-fg-muted">{home.address.formatted}</p>
+        )}
         <div className="flex flex-wrap gap-2 pt-2">
           {home.designStandard && <Tag>{home.designStandard}</Tag>}
           {home.propertyType && <Tag variant="outline">{home.propertyType}</Tag>}
           {home.region && <Tag variant="pink">{home.region}</Tag>}
+          {home.availableBeds > 0 ? (
+            <Tag variant="soft">{home.availableBeds} bed{home.availableBeds === 1 ? '' : 's'} available</Tag>
+          ) : (
+            <Tag variant="outline">Currently full</Tag>
+          )}
         </div>
       </header>
 
-      <Module weight="card" className="p-6 flex flex-wrap gap-8">
-        <div>
-          <span className="eyebrow">Active beds.</span>
-          <p className="text-3xl font-bold">{home.activeBeds}</p>
-        </div>
-        <div>
-          <span className="eyebrow">Currently occupied.</span>
-          <p className="text-3xl font-bold">{home.occupiedBeds}</p>
-        </div>
-        <div>
-          <span className="eyebrow">Vacant.</span>
-          <p className="text-3xl font-bold text-cc-magenta">{home.availableBeds}</p>
-        </div>
-      </Module>
+      <SDAHeroGallery
+        homeName={home.name}
+        imageUrl={null}
+      />
 
-      {home.amenities.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-bold mb-3">Amenities.</h2>
-          <ul className="flex flex-wrap gap-2">
-            {home.amenities.map((a) => (
-              <li key={a}>
-                <Tag variant="outline">{a}</Tag>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_360px] gap-10">
+        <main className="flex flex-col gap-10">
+          {home.description && (
+            <Section number={1} title="About this home.">
+              <p className="text-base leading-relaxed max-w-prose">{home.description}</p>
+            </Section>
+          )}
 
-      {home.description && (
-        <section>
-          <h2 className="text-2xl font-bold mb-3">About this home.</h2>
-          <p className="text-base leading-relaxed max-w-prose">{home.description}</p>
-        </section>
-      )}
+          <Section number={home.description ? 2 : 1} title="Accessibility & amenities.">
+            <AccessibilityFeaturesGrid
+              amenities={home.amenities}
+              accessibility={home.accessibility}
+            />
+          </Section>
 
-      {home.sharepointUrl && (
-        <p className="text-sm">
-          Photos and floorplans:{' '}
-          <a href={home.sharepointUrl} className="underline">
-            SharePoint folder
-          </a>
-        </p>
-      )}
-    </article>
+          {home.address.suburb && (
+            <Section number={home.description ? 3 : 2} title="The neighbourhood.">
+              <SuburbContextBlock suburb={home.address.suburb} />
+            </Section>
+          )}
+        </main>
+
+        <SDAQuickFactsCard home={home} hrefPrefix={hrefPrefix} />
+      </div>
+
+      <SimilarHomesRow current={home} hrefPrefix={hrefPrefix} />
+    </div>
   )
 }
