@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { Button } from '@/components/primitives/Button'
 import { Link } from '@/components/primitives/Link'
-import { LocaleSwitcher } from './LocaleSwitcher'
+import { AccessibilityToolbar } from './AccessibilityToolbar'
 import type { PayloadLocale } from '@/lib/locale'
 import { payloadLocaleToUrlSlug } from '@/lib/locale'
 
@@ -54,7 +54,7 @@ export async function Header({ locale }: { locale: PayloadLocale }) {
         </div>
 
         <div className="flex items-center justify-end">
-          <LocaleSwitcher current={currentSlug} />
+          <AccessibilityToolbar currentLocale={currentSlug} />
         </div>
       </div>
     </header>
