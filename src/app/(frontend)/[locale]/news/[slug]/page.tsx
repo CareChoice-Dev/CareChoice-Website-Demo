@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
 import { findOneNewsBySlug } from '@/lib/payload-client'
+import { RichText } from '@/components/primitives/RichText'
 
 export default async function NewsArticle({
   params,
@@ -38,9 +39,7 @@ export default async function NewsArticle({
         <p className="text-lg leading-relaxed">{article.excerpt as string}</p>
       )}
 
-      <p className="text-base leading-relaxed">
-        Full body rendering (Lexical richText `body` field) lands in Week 3.
-      </p>
+      <RichText value={article.body} />
     </article>
   )
 }

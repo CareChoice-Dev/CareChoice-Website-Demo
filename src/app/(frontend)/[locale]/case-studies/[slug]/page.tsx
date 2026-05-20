@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
 import { findOneCaseStudyBySlug } from '@/lib/payload-client'
+import { RichText } from '@/components/primitives/RichText'
 
 export default async function CaseStudyDetail({
   params,
@@ -32,9 +33,7 @@ export default async function CaseStudyDetail({
         </blockquote>
       )}
 
-      <p className="text-base leading-relaxed max-w-prose">
-        Full story rendering (Lexical richText `story` field) lands in Week 3.
-      </p>
+      <RichText value={story.story} />
     </article>
   )
 }
