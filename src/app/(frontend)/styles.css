@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .shadow-hard-card { box-shadow: var(--cc-shadow-card); }
+  .shadow-hard-btn  { box-shadow: var(--cc-shadow-btn-hover); }
+}
+
 :root {
   --font-mono: 'Roboto Mono', monospace;
 }
