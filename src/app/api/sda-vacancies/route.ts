@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { runQuery } from '@/lib/salesforce'
-import { mapSiteRecord, type SiteRecord } from './mapper'
+import { mapSiteRecord, type SiteRecord, type SDAPhotoRef } from './mapper'
+import { getPayloadClient } from '@/lib/payload-client'
 import fallback from '@/lib/sda-vacancies-fallback.json'
 
 export const revalidate = 600
@@ -34,10 +35,50 @@ const SOQL = `
   .replace(/\s+/g, ' ')
   .trim()
 
+async function fetchPhotosBySiteId(): Promise<Map<string, SDAPhotoRef[]>> {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'sda-photos',
+    limit: 200,
+    sort: 'displayOrder',
+  })
+
+  const grouped = new Map<string, SDAPhotoRef[]>()
+  for (const doc of result.docs as Array<{
+    siteId: string
+    isHero?: boolean
+    media: { url?: string; alt?: string } | string | number
+  }>) {
+    const media = typeof doc.media === 'object' ? doc.media : null
+    if (!media?.url) continue
+    const ref: SDAPhotoRef = {
+      url: media.url,
+      alt: media.alt ?? '',
+      isHero: Boolean(doc.isHero),
+    }
+    const arr = grouped.get(doc.siteId) ?? []
+    if (ref.isHero) arr.unshift(ref)
+    else arr.push(ref)
+    grouped.set(doc.siteId, arr)
+  }
+  return grouped
+}
+
 export async function GET() {
   try {
     const records = await runQuery<SiteRecord>(SOQL)
     const vacancies = records.map(mapSiteRecord)
+
+    // Join Payload SDAPhotos in. If photo fetch fails, vacancies still ship with empty photo arrays.
+    try {
+      const photosBySite = await fetchPhotosBySiteId()
+      for (const v of vacancies) {
+        v.photos = photosBySite.get(v.id) ?? []
+      }
+    } catch (photoErr) {
+      console.error('[sda-vacancies] photo join failed; continuing without photos', photoErr)
+    }
+
     return NextResponse.json({
       vacancies,
       source: 'salesforce',
