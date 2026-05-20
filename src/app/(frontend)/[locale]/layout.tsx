@@ -5,6 +5,7 @@ import { Header } from '@/components/chrome/Header'
 import { Footer } from '@/components/chrome/Footer'
 import { SkipToMain } from '@/components/chrome/SkipToMain'
 import { ChatStub } from '@/components/chrome/ChatStub'
+import { A11yApplyClient } from '@/components/chrome/A11yApplyClient'
 
 export async function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'vi' }, { locale: 'zh' }, { locale: 'easy-read' }]
@@ -26,6 +27,7 @@ export default async function LocaleLayout({
     <html lang={htmlLang}>
       <body>
         <SkipToMain />
+        <A11yApplyClient />
         <Header locale={payloadLocale} />
         <main id="main">{children}</main>
         <Footer locale={payloadLocale} />
