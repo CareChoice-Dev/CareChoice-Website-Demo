@@ -31,7 +31,7 @@ Pages to extract for the demo:
 - `/our-team` → Pages
 - `/ndis` → Pages
 - `/who-we-support` → Pages
-- `/services/supported-independent-living` → Services
+- `/services/supported-independent-living` → Services ✅ (extracted in Plan 3 Task 30; brand-voice refinement is a manual /admin task)
 - `/services/short-term-accommodation` → Services
 - `/services/community-access` → Services
 - `/services/positive-behaviour-support` → Services

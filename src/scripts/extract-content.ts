@@ -14,9 +14,11 @@
  */
 
 import { load } from 'cheerio'
-import { getPayload } from 'payload'
-import config from '../payload.config'
-import 'dotenv/config'
+import dotenv from 'dotenv'
+
+// Load .env.local explicitly (dotenv/config only reads .env)
+dotenv.config({ path: '.env.local' })
+dotenv.config() // fallback to .env if .env.local missing
 
 interface CLIArgs {
   url: string
@@ -89,6 +91,8 @@ async function main() {
     return
   }
 
+  const { default: config } = await import('../payload.config')
+  const { getPayload } = await import('payload')
   const payload = await getPayload({ config })
 
   const data: Record<string, unknown> = {
@@ -100,6 +104,12 @@ async function main() {
   if (args.collection === 'news') {
     data.publishDate = new Date().toISOString()
     data.excerpt = scraped.intro.slice(0, 200)
+  }
+
+  if (args.collection === 'services') {
+    // Services collection requires a category. Default to 'housing' for
+    // accommodation-related services; user can adjust in /admin.
+    data.category = 'housing'
   }
 
   await payload.create({
