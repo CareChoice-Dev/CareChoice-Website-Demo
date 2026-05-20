@@ -35,7 +35,7 @@ export function SDAFilters({
   )
 
   return (
-    <div className="flex flex-wrap gap-3 items-center border-2 border-cc-black p-3 mb-6 bg-cc-white">
+    <div className="sticky top-0 z-30 flex flex-wrap gap-3 items-center border-2 border-cc-black p-3 mb-6 bg-cc-white shadow-[0_4px_0_#000]">
       <label className="flex items-center gap-2 text-sm font-semibold">
         Region:
         <select
