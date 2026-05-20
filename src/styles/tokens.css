@@ -163,3 +163,39 @@ code, pre, .mono {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ============================================================
+   ACCESSIBILITY TOOLBAR — variants via <html data-*>
+   Settings: text size, contrast mode, dyslexia font, reduce motion.
+   Applied client-side by A11yApplyClient component (mounted in layout).
+   ============================================================ */
+
+html[data-text-size="sm"] {
+  --cc-fs-body: 14px;
+  --cc-fs-body-lg: 16px;
+}
+html[data-text-size="lg"] {
+  --cc-fs-body: 20px;
+  --cc-fs-body-lg: 24px;
+}
+
+html[data-contrast="high"] {
+  --cc-magenta: #C8008C;
+  --cc-magenta-60: #FFFFFF;
+  --cc-surface-pink: #FFFFFF;
+  --cc-fg-muted: #000000;
+  --cc-border-w: 9px;
+  --cc-border-w-sm: 5px;
+}
+
+html[data-dyslexia-font="true"] {
+  --cc-font-sans: 'OpenDyslexic', 'Source Sans 3', system-ui, sans-serif;
+}
+
+html[data-reduce-motion="true"] *,
+html[data-reduce-motion="true"] *::before,
+html[data-reduce-motion="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
