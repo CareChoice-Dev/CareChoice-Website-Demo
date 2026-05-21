@@ -22,7 +22,10 @@ export default async function EnquiryPage({
         </p>
       </header>
 
-      <EnquiryForm confirmationPath={`/${urlLocale}/enquiry/confirmation`} />
+      <EnquiryForm
+        confirmationPath={`/${urlLocale}/enquiry/confirmation`}
+        privacyPath={`/${urlLocale}/privacy`}
+      />
     </div>
   )
 }
