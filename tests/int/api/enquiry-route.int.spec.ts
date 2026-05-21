@@ -41,8 +41,10 @@ describe('/api/enquiry POST', () => {
 
     const res = await POST(buildRequest({
       audience: 'client',
+      enquiringFor: 'self',
       fullName: 'Mira Tan',
       email: 'mira@example.com',
+      privacyConsent: true,
     }))
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -58,8 +60,10 @@ describe('/api/enquiry POST', () => {
 
     const res = await POST(buildRequest({
       audience: 'client',
+      enquiringFor: 'self',
       fullName: 'X',
       email: 'x@y.co',
+      privacyConsent: true,
     }))
 
     expect(res.status).toBe(200)
@@ -68,5 +72,15 @@ describe('/api/enquiry POST', () => {
     expect(body.salesforceId).toBeUndefined()
     expect(consoleErrorSpy).toHaveBeenCalled()
     consoleErrorSpy.mockRestore()
+  })
+
+  it('rejects a payload missing privacyConsent with 422', async () => {
+    const res = await POST(buildRequest({
+      audience: 'client',
+      enquiringFor: 'self',
+      fullName: 'Mira Tan',
+      email: 'mira@example.com',
+    }))
+    expect(res.status).toBe(422)
   })
 })
