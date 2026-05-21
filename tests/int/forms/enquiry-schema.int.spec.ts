@@ -6,9 +6,12 @@ describe('enquirySchema', () => {
     const result = enquirySchema.safeParse({
       audience: 'client',
       enquiringFor: 'self',
-      serviceInterests: ['sil', 'sda'],
+      serviceInterests: [
+        'Supported Independent Living (over 10 hours)',
+        'Specialist Disability Housing',
+      ],
       postcode: 'Werribee 3030',
-      ndisPlan: 'yes',
+      fundingPlan: 'NDIS',
       supportNeeds: 'Mornings and evenings.',
       fullName: 'Mira Tan',
       email: 'mira@example.com',
@@ -65,16 +68,16 @@ describe('enquirySchema', () => {
     expect(result.success).toBe(false)
   })
 
-  it('accepts a referrer with organisation + referrerRole', () => {
+  it('accepts a referrer with organisation + relationshipToParticipant', () => {
     const result = enquirySchema.safeParse({
       audience: 'referrer',
       organisation: 'OrgCorp',
-      referrerRole: 'support-coordinator',
+      relationshipToParticipant: 'Support coordinator',
       participantFirstName: 'Jamie',
       natureOfDisability: 'Cerebral palsy.',
-      serviceInterests: ['sda', 'complex-care'],
+      serviceInterests: ['Specialist Disability Housing', '24 Hour Complex Support'],
       postcode: '3030',
-      ndisPlan: 'yes',
+      fundingPlan: 'NDIS',
       fullName: 'Alex Patel',
       email: 'alex@orgcorp.com',
       privacyConsent: true,
@@ -82,10 +85,10 @@ describe('enquirySchema', () => {
     expect(result.success).toBe(true)
   })
 
-  it('rejects a referrer with an invalid referrerRole value', () => {
+  it('rejects a referrer with an invalid relationshipToParticipant value', () => {
     const result = enquirySchema.safeParse({
       audience: 'referrer',
-      referrerRole: 'random-junk',
+      relationshipToParticipant: 'random-junk',
       fullName: 'Alex Patel',
       email: 'alex@orgcorp.com',
       privacyConsent: true,
@@ -97,11 +100,11 @@ describe('enquirySchema', () => {
     const result = enquirySchema.safeParse({
       audience: 'client',
       enquiringFor: 'other',
-      clientRelationship: 'parent',
+      relationshipToParticipant: 'Parent',
       participantFirstName: 'Sam',
       natureOfDisability: 'Autism spectrum.',
-      serviceInterests: ['sil'],
-      ndisPlan: 'unsure',
+      serviceInterests: ['Supported Independent Living (over 10 hours)'],
+      fundingPlan: 'Unsure',
       fullName: 'Mira Tan',
       email: 'mira@example.com',
       privacyConsent: true,
@@ -139,7 +142,7 @@ describe('enquirySchema', () => {
       audience: 'client',
       enquiringFor: 'self',
       salutation: 'Dr.',
-      heardFrom: 'search',
+      heardFrom: 'Google',
       fullName: 'Mira Tan',
       email: 'mira@example.com',
       privacyConsent: true,
