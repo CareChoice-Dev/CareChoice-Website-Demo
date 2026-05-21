@@ -42,8 +42,12 @@ describe('/api/enquiry POST', () => {
     const res = await POST(buildRequest({
       audience: 'client',
       enquiringFor: 'self',
+      serviceInterests: ['Behaviour Support', 'Respite'],
+      postcode: '3030',
+      fundingPlan: 'NDIS',
       fullName: 'Mira Tan',
       email: 'mira@example.com',
+      heardFrom: 'Google',
       privacyConsent: true,
     }))
     expect(res.status).toBe(200)
