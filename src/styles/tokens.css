@@ -4,8 +4,6 @@
    Accessibility adaptations marked with A11Y-ADAPT comments.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
-
 :root {
   /* COLOUR — Brand (fixed palette, no tints, no gradients) */
   --cc-magenta:     #FF008C;
@@ -34,7 +32,7 @@
 
   /* TYPOGRAPHY — Families */
   --cc-font-sans: var(--cc-font-sans-loaded, 'Source Sans 3'), 'Source Sans Pro', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --cc-font-mono: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+  --cc-font-mono: var(--cc-font-mono-loaded, 'JetBrains Mono'), 'Menlo', 'Consolas', monospace;
 
   /* TYPOGRAPHY — Weights */
   --cc-w-light:    300;

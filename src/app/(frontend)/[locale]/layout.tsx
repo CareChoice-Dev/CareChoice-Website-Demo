@@ -1,6 +1,7 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
 import localFont from 'next/font/local'
+import { JetBrains_Mono } from 'next/font/google'
 import { isUrlSlug, urlSlugToLocale, htmlLangFor } from '@/lib/locale'
 import { Header } from '@/components/chrome/Header'
 import { Footer } from '@/components/chrome/Footer'
@@ -26,6 +27,14 @@ const sourceSans3 = localFont({
   preload: true,
 })
 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--cc-font-mono-loaded',
+  preload: false,
+})
+
 export async function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'vi' }, { locale: 'zh' }, { locale: 'easy-read' }]
 }
@@ -46,7 +55,7 @@ export default async function LocaleLayout({
     <html
       lang={htmlLang}
       data-easy-read={payloadLocale === 'en-easy-read' ? 'true' : undefined}
-      className={sourceSans3.variable}
+      className={`${sourceSans3.variable} ${jetbrainsMono.variable}`}
     >
       <body>
         <SkipToMain />
