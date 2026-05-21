@@ -16,22 +16,76 @@ function splitName(fullName: string): { FirstName: string; LastName: string } {
   }
 }
 
-export function enquiryToSalesforce(payload: EnquiryPayload): SalesforceWriteTarget {
-  if (payload.audience === 'referrer') {
-    const descLines = [
-      payload.organisation && `Organisation: ${payload.organisation}`,
-      payload.role && `Role: ${payload.role}`,
-      payload.fullName && `Contact: ${payload.fullName}`,
-      payload.email && `Email: ${payload.email}`,
-      payload.phone && `Phone: ${payload.phone}`,
-      payload.message && `\nMessage:\n${payload.message}`,
-    ].filter(Boolean)
+function buildDescription(p: EnquiryPayload): string {
+  const lines: string[] = []
 
+  if (p.audience === 'client') {
+    lines.push('=== About the enquiry ===')
+    if (p.enquiringFor === 'self') lines.push('Enquiring for: self')
+    if (p.enquiringFor === 'other') {
+      const rel = p.clientRelationship ? ` (${p.clientRelationship})` : ''
+      const name = p.participantFirstName ? p.participantFirstName : 'a person they support'
+      lines.push(`Enquiring on behalf of: ${name}${rel}`)
+    }
+    if (p.natureOfDisability) lines.push(`Nature of disability: ${p.natureOfDisability}`)
+    if (p.serviceInterests?.length)
+      lines.push(`Service interest: ${p.serviceInterests.join(', ')}`)
+    if (p.postcode) lines.push(`Postcode/suburb: ${p.postcode}`)
+    if (p.ndisPlan) lines.push(`NDIS plan: ${p.ndisPlan}`)
+    if (p.supportNeeds) lines.push(`Support requirements: ${p.supportNeeds}`)
+  } else if (p.audience === 'referrer') {
+    lines.push('=== About the enquiry ===')
+    if (p.organisation) lines.push(`Organisation: ${p.organisation}`)
+    if (p.referrerRole) lines.push(`Role: ${p.referrerRole}`)
+    if (p.participantFirstName) lines.push(`Participant first name: ${p.participantFirstName}`)
+    if (p.natureOfDisability) lines.push(`Nature of disability: ${p.natureOfDisability}`)
+    if (p.serviceInterests?.length)
+      lines.push(`Service interest: ${p.serviceInterests.join(', ')}`)
+    if (p.postcode) lines.push(`Postcode/suburb: ${p.postcode}`)
+    if (p.ndisPlan) lines.push(`NDIS plan: ${p.ndisPlan}`)
+    if (p.supportNeeds) lines.push(`Support requirements: ${p.supportNeeds}`)
+  } else {
+    lines.push('=== Career interest ===')
+    if (p.careerRoleInterest) lines.push(`Role: ${p.careerRoleInterest}`)
+    if (p.careerLocation) lines.push(`Preferred location: ${p.careerLocation}`)
+    if (p.employmentType) lines.push(`Employment type: ${p.employmentType}`)
+  }
+
+  if (p.heardFrom && p.heardFrom !== 'prefer-not-to-say') {
+    lines.push('')
+    lines.push('=== Source ===')
+    lines.push(`How they heard: ${p.heardFrom}`)
+  }
+
+  if (p.message) {
+    lines.push('')
+    lines.push('=== Additional notes ===')
+    lines.push(p.message)
+  }
+
+  lines.push('')
+  lines.push(`Privacy consent confirmed at ${new Date().toISOString()}`)
+
+  return lines.join('\n')
+}
+
+export function enquiryToSalesforce(payload: EnquiryPayload): SalesforceWriteTarget {
+  const description = buildDescription(payload)
+
+  if (payload.audience === 'referrer') {
     return {
       sobject: 'Case',
       data: {
         Subject: `Website enquiry — Referrer${payload.organisation ? ` (${payload.organisation})` : ''}`,
-        Description: descLines.join('\n'),
+        Description: [
+          `Contact: ${payload.fullName}`,
+          `Email: ${payload.email}`,
+          payload.phone ? `Phone: ${payload.phone}` : null,
+          '',
+          description,
+        ]
+          .filter((l) => l !== null)
+          .join('\n'),
         Origin: 'Web',
         Status: 'New',
       },
@@ -41,23 +95,30 @@ export function enquiryToSalesforce(payload: EnquiryPayload): SalesforceWriteTar
   const { FirstName, LastName } = splitName(payload.fullName)
   const isClient = payload.audience === 'client'
 
-  const descLines = [
-    isClient && payload.serviceInterest && `Service interest: ${payload.serviceInterest}`,
-    isClient && payload.homePreference && `Home preference: ${payload.homePreference}`,
-    !isClient && payload.role && `Role interest: ${payload.role}`,
-    payload.message && `\nMessage:\n${payload.message}`,
-  ].filter(Boolean)
+  let Company: string
+  if (isClient) {
+    Company = 'Personal enquiry'
+  } else {
+    // career
+    Company = 'Career applicant'
+  }
+
+  const data: Record<string, unknown> = {
+    FirstName,
+    LastName,
+    Email: payload.email,
+    Phone: payload.phone ?? '',
+    Company,
+    LeadSource: isClient ? 'Website Demo' : 'Careers',
+    Description: description,
+  }
+
+  if (payload.salutation && payload.salutation !== 'prefer-not-to-say') {
+    data.Salutation = payload.salutation
+  }
 
   return {
     sobject: 'Lead',
-    data: {
-      FirstName,
-      LastName,
-      Email: payload.email,
-      Phone: payload.phone ?? '',
-      Company: isClient ? 'Personal enquiry' : 'Career applicant',
-      LeadSource: isClient ? 'Website Demo' : 'Careers',
-      Description: descLines.join('\n'),
-    },
+    data,
   }
 }

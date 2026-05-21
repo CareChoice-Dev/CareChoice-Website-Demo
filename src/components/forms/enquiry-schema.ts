@@ -91,9 +91,7 @@ export const enquirySchema = z.object({
 
   // Privacy
   privacyConsent: z.literal(true, {
-    errorMap: () => ({
-      message: 'Please agree to the Privacy Statement to send your enquiry.',
-    }),
+    message: 'Please agree to the Privacy Statement to send your enquiry.',
   }),
 })
 
