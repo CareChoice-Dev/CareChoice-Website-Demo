@@ -32,10 +32,22 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], channel: 'chromium' },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
   webServer: {
     command: 'pnpm dev',
     reuseExistingServer: true,
     url: 'http://localhost:3000',
+    // Note: the `pnpm dev` command is currently broken on this machine due to a
+    // pnpmfile/corepack mismatch. `reuseExistingServer: true` means Playwright
+    // skips the spawn when a server is already listening on the URL — start
+    // `npm run dev` manually in another terminal before running these specs.
   },
 })
