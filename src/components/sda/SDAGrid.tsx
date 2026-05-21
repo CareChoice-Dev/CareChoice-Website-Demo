@@ -24,8 +24,8 @@ export function SDAGrid({ vacancies, hrefPrefix }: { vacancies: SDAVacancy[]; hr
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((home) => (
-            <SDAHomeCard key={home.id} home={home} hrefPrefix={hrefPrefix} />
+          {filtered.map((home, i) => (
+            <SDAHomeCard key={home.id} home={home} hrefPrefix={hrefPrefix} eager={i < 3} />
           ))}
         </div>
       )}

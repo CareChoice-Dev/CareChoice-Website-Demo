@@ -4,7 +4,15 @@ import { Module } from '@/components/primitives/Module'
 import { Tag } from '@/components/primitives/Tag'
 import type { SDAVacancy } from './types'
 
-export function SDAHomeCard({ home, hrefPrefix }: { home: SDAVacancy; hrefPrefix: string }) {
+export function SDAHomeCard({
+  home,
+  hrefPrefix,
+  eager = false,
+}: {
+  home: SDAVacancy
+  hrefPrefix: string
+  eager?: boolean
+}) {
   const availableLabel =
     home.availableBeds === 0
       ? 'Currently full'
@@ -24,6 +32,7 @@ export function SDAHomeCard({ home, hrefPrefix }: { home: SDAVacancy; hrefPrefix
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
               className="object-cover"
+              priority={eager}
             />
           ) : (
             <span className="eyebrow text-cc-fg-muted">Photo TBA</span>
