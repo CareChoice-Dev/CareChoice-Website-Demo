@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "analyze": "cross-env ANALYZE=true NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build --webpack",
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@lhci/cli": "^0.15.1",
+    "@next/bundle-analyzer": "^16.2.6",
     "@playwright/test": "1.58.2",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "16.3.0",
