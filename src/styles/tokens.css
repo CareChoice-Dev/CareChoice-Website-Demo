@@ -33,7 +33,7 @@
   --cc-on-light:      var(--cc-black);
 
   /* TYPOGRAPHY — Families */
-  --cc-font-sans: 'Source Sans 3', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --cc-font-sans: var(--cc-font-sans-loaded, 'Source Sans 3'), 'Source Sans Pro', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --cc-font-mono: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
 
   /* TYPOGRAPHY — Weights */

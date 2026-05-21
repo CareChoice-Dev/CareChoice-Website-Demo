@@ -1,11 +1,30 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
+import localFont from 'next/font/local'
 import { isUrlSlug, urlSlugToLocale, htmlLangFor } from '@/lib/locale'
 import { Header } from '@/components/chrome/Header'
 import { Footer } from '@/components/chrome/Footer'
 import { SkipToMain } from '@/components/chrome/SkipToMain'
 import { AgentforceEmbed } from '@/components/chrome/AgentforceEmbed'
 import { A11yApplyClient } from '@/components/chrome/A11yApplyClient'
+
+const sourceSans3 = localFont({
+  src: [
+    {
+      path: '../../../../public/fonts/SourceSans3-VariableFont_wght.ttf',
+      style: 'normal',
+      weight: '200 900',
+    },
+    {
+      path: '../../../../public/fonts/SourceSans3-Italic-VariableFont_wght.ttf',
+      style: 'italic',
+      weight: '200 900',
+    },
+  ],
+  display: 'swap',
+  variable: '--cc-font-sans-loaded',
+  preload: true,
+})
 
 export async function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'vi' }, { locale: 'zh' }, { locale: 'easy-read' }]
@@ -27,6 +46,7 @@ export default async function LocaleLayout({
     <html
       lang={htmlLang}
       data-easy-read={payloadLocale === 'en-easy-read' ? 'true' : undefined}
+      className={sourceSans3.variable}
     >
       <body>
         <SkipToMain />

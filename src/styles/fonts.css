@@ -1,22 +1,4 @@
-/* Source Sans 3 — CareChoice brand typeface (variable font, ships local). */
-@font-face {
-  font-family: 'Source Sans 3';
-  src: url('/fonts/SourceSans3-VariableFont_wght.ttf') format('truetype-variations'),
-       url('/fonts/SourceSans3-VariableFont_wght.ttf') format('truetype');
-  font-weight: 200 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Source Sans 3';
-  src: url('/fonts/SourceSans3-Italic-VariableFont_wght.ttf') format('truetype-variations'),
-       url('/fonts/SourceSans3-Italic-VariableFont_wght.ttf') format('truetype');
-  font-weight: 200 900;
-  font-style: italic;
-  font-display: swap;
-}
-
+/* OpenDyslexic — alternate typeface for accessibility toolbar */
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/woff/OpenDyslexic-Regular.woff') format('woff');
