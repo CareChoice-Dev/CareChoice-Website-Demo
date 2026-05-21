@@ -99,3 +99,34 @@ npx lhci open
 npm run analyze
 Start-Process .next/analyze/client.html
 ```
+
+---
+
+## Search engine decision (end of Plan 5)
+
+**Decision: Stay on Pagefind for the demo. Re-evaluate after Rehearsal #3.**
+
+### Why stay
+
+- Pagefind covers the search beat (Beat 11) at $0 cost
+- No external service dependency for demo day
+- Index will grow naturally as content team publishes more Services / Case Studies / News (Plan 5 Phase D wired `generateStaticParams` so each published doc becomes a statically-rendered page Pagefind indexes)
+
+### What would flip the decision to Algolia
+
+- Rehearsal #3 audience finds "no results for [common query]" jarring
+- Pagefind's typo tolerance proves inadequate (e.g. demo audience types "Mt Duneed" not "Mount Duneed")
+- Content team can't get 5+ Case Studies and 3+ News items published before demo day
+
+### If we flip
+
+Algolia free tier: 10k searches/month, 10k records. Implementation effort: ~3-4 hours. Steps would be: create Algolia app, push records via Payload webhook on publish, swap SearchUI to use `algoliasearch-lite` (~7KB client) instead of Pagefind. Plan 6 scope.
+
+## Plan 6 perf focus
+
+`/en/find-a-home` is the only polished page below 85 (76). Top opportunities to chase:
+- Redirects (770 ms) — likely the trailing-slash → no-slash normalisation that Vercel adds. Audit and tighten.
+- Render-blocking resources (450 ms) — JetBrains Mono Google Fonts import + Leaflet CSS. Self-host JetBrains Mono via next/font; consider deferring Leaflet CSS to only render on map-view toggle.
+- HTTP/2 multiplexing (500 ms) — Vercel default; investigate config.
+
+Speed Index (8.3 s) reflects many SDA cards painting in parallel. Considerations: skeleton/blur placeholders for SDA card images; smaller image sizes for grid view.
