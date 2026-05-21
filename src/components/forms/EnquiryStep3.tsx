@@ -27,15 +27,18 @@ const SALUTATION_LABELS: Record<(typeof SALUTATIONS)[number], string> = {
 
 const HEARD_FROM_LABELS: Record<(typeof HEARD_FROM)[number], string> = {
   'prefer-not-to-say': 'Prefer not to say',
-  search: 'Search engine',
-  'family-friend': 'A family member or friend',
-  'allied-health': 'Allied health professional',
-  'ndis-related': 'NDIS-related',
-  hospital: 'Hospital or clinical referral',
-  'social-media': 'Social media',
-  newsletter: 'CareChoice events / newsletter',
-  advertising: 'Advertising',
-  other: 'Other',
+  'CareChoice website': 'CareChoice website',
+  Google: 'Google search',
+  'Family/friend': 'Family or friend',
+  'Allied Health Professional - Occupational therapist': 'Occupational therapist',
+  'Allied Health Professional - Speech Pathologist': 'Speech pathologist',
+  'Support coordinator': 'Support coordinator',
+  'NDIS- LAC': 'NDIS LAC',
+  Hospital: 'Hospital referral',
+  'Social media': 'Social media',
+  Facebook: 'Facebook',
+  'Current CareChoice client': 'Current CareChoice client',
+  Other: 'Something else',
 }
 
 export function EnquiryStep3({ draft, onChange, privacyPath }: Props) {

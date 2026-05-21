@@ -7,12 +7,11 @@ import { EnquiryStep3 } from './EnquiryStep3'
 import { Module } from '@/components/primitives/Module'
 import { Button } from '@/components/primitives/Button'
 import type {
-  CLIENT_RELATIONSHIPS,
   EMPLOYMENT_TYPES,
   ENQUIRING_FOR,
+  FUNDING_PLAN,
   HEARD_FROM,
-  NDIS_STATUS,
-  REFERRER_ROLES,
+  RELATIONSHIPS,
   SALUTATIONS,
   SERVICE_INTERESTS,
 } from './enquiry-schema'
@@ -26,17 +25,16 @@ export interface EnquiryDraft {
   // Participant-shaped
   serviceInterests?: Array<(typeof SERVICE_INTERESTS)[number]>
   postcode?: string
-  ndisPlan?: (typeof NDIS_STATUS)[number]
+  fundingPlan?: (typeof FUNDING_PLAN)[number]
   supportNeeds?: string
   participantFirstName?: string
   natureOfDisability?: string
 
-  // Client-other
-  clientRelationship?: (typeof CLIENT_RELATIONSHIPS)[number]
+  // Single relationship field (used by client/other AND referrer)
+  relationshipToParticipant?: (typeof RELATIONSHIPS)[number]
 
   // Referrer
   organisation?: string
-  referrerRole?: (typeof REFERRER_ROLES)[number]
 
   // Career
   careerRoleInterest?: string
@@ -61,13 +59,12 @@ const STEPS = [1, 2, 3] as const
 const AUDIENCE_SCOPED_KEYS: Array<keyof EnquiryDraft> = [
   'serviceInterests',
   'postcode',
-  'ndisPlan',
+  'fundingPlan',
   'supportNeeds',
   'participantFirstName',
   'natureOfDisability',
-  'clientRelationship',
+  'relationshipToParticipant',
   'organisation',
-  'referrerRole',
   'careerRoleInterest',
   'careerLocation',
   'employmentType',
@@ -77,7 +74,7 @@ const INITIAL_DRAFT: EnquiryDraft = {
   audience: null,
   enquiringFor: null,
   serviceInterests: [],
-  ndisPlan: 'unsure',
+  fundingPlan: 'Unsure',
   salutation: 'prefer-not-to-say',
   heardFrom: 'prefer-not-to-say',
   privacyConsent: false,
@@ -90,7 +87,7 @@ function resetAudienceScopedFields(draft: EnquiryDraft): EnquiryDraft {
   }
   // Re-apply the per-branch defaults that the schema/UX expects to exist.
   next.serviceInterests = []
-  next.ndisPlan = 'unsure'
+  next.fundingPlan = 'Unsure'
   return next
 }
 

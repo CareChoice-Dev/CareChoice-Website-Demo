@@ -2,10 +2,9 @@
 
 import type { EnquiryDraft } from './EnquiryForm'
 import {
-  CLIENT_RELATIONSHIPS,
   EMPLOYMENT_TYPES,
-  NDIS_STATUS,
-  REFERRER_ROLES,
+  FUNDING_PLAN,
+  RELATIONSHIPS,
   SERVICE_INTERESTS,
 } from './enquiry-schema'
 
@@ -21,39 +20,72 @@ const labelClass = 'flex flex-col gap-1'
 const labelTextClass = 'font-semibold text-sm'
 const helperClass = 'text-xs text-cc-fg-muted'
 
+// Display labels are nicer than the raw Salesforce picklist strings. The option `value`
+// MUST be the exact Salesforce string — only the visible label is humanised.
 const SERVICE_INTEREST_LABELS: Record<(typeof SERVICE_INTERESTS)[number], string> = {
-  sil: 'Supported Independent Living (SIL)',
-  sda: 'Specialist Disability Accommodation (SDA)',
-  'complex-care': 'Complex Care',
-  'community-access': 'Community Access',
-  respite: 'Respite',
-  pbs: 'Positive Behaviour Support',
-  'allied-health': 'Allied Health',
-  other: 'Other',
+  '24 Hour Complex Support': '24-hour complex support',
+  'Behaviour Support': 'Behaviour support',
+  'CareChoice Homes': 'CareChoice Homes',
+  'Community access': 'Community access',
+  'Community Nursing': 'Community nursing',
+  'Custodial/Community Re-Entry': 'Custodial / community re-entry',
+  'Disability Services': 'Disability services',
+  'Rapid Hospital Discharge': 'Rapid hospital discharge',
+  Respite: 'Respite',
+  'Specialist Disability Housing': 'Specialist disability housing (SDA)',
+  'Specialist Support Coordination': 'Specialist support coordination',
+  'Support Coordination': 'Support coordination',
+  'Supported Independent Living (over 10 hours)': 'Supported independent living — 10+ hrs/week',
+  'Supported Independent Living (under 10 hours)': 'Supported independent living — under 10 hrs/week',
+  'TAC/Worksafe Support': 'TAC / WorkSafe support',
 }
 
-const CLIENT_RELATIONSHIP_LABELS: Record<(typeof CLIENT_RELATIONSHIPS)[number], string> = {
-  parent: 'Parent',
-  sibling: 'Sibling',
-  spouse: 'Spouse / partner',
-  child: 'Child',
-  'other-family': 'Other family member',
-  friend: 'Friend',
-  carer: 'Carer / Support worker',
-  other: 'Other',
-}
+// Subset of the Salesforce relationship picklist shown to client+other audiences (family role).
+const FAMILY_RELATIONSHIPS = [
+  'Parent',
+  'Sibling',
+  'Spouse',
+  'Other family member',
+  'Family Member',
+  'Other',
+] as const
 
-const REFERRER_ROLE_LABELS: Record<(typeof REFERRER_ROLES)[number], string> = {
-  'support-coordinator': 'Support Coordinator',
-  'specialist-support-coordinator': 'Specialist Support Coordinator',
-  'case-manager': 'Case Manager',
-  'allied-health': 'Allied Health Professional',
-  hospital: 'Hospital',
-  lac: 'LAC (Local Area Coordinator)',
-  'social-worker': 'Social Worker',
-  'behaviour-support': 'Behaviour Support Practitioner',
-  'disability-liaison': 'Disability Liaison Officer',
-  other: 'Other',
+// Subset of the Salesforce relationship picklist shown to referrer audiences (professional role).
+const PROFESSIONAL_RELATIONSHIPS = [
+  'Allied Health',
+  'Associated Provider',
+  'Behaviour Support Practitioner',
+  'Case Manager',
+  'Crisis housing provider',
+  'Disability Liaison Officer',
+  'Hospital',
+  'LAC',
+  'Referrer',
+  'Social Worker',
+  'Spec Support Coordinator',
+  'Support coordinator',
+  'Other',
+] as const
+
+const RELATIONSHIP_LABELS: Record<(typeof RELATIONSHIPS)[number], string> = {
+  'Allied Health': 'Allied health professional',
+  'Associated Provider': 'Associated provider',
+  'Behaviour Support Practitioner': 'Behaviour support practitioner',
+  'Case Manager': 'Case manager',
+  'Crisis housing provider': 'Crisis housing provider',
+  'Disability Liaison Officer': 'Disability liaison officer',
+  'Family Member': 'Other family member',
+  Hospital: 'Hospital',
+  LAC: 'LAC (Local Area Coordinator)',
+  Other: 'Other',
+  'Other family member': 'Other family member',
+  Parent: 'Parent',
+  Referrer: 'Referrer',
+  Sibling: 'Sibling',
+  'Social Worker': 'Social worker',
+  'Spec Support Coordinator': 'Specialist support coordinator',
+  Spouse: 'Spouse / partner',
+  'Support coordinator': 'Support coordinator',
 }
 
 const EMPLOYMENT_TYPE_LABELS: Record<(typeof EMPLOYMENT_TYPES)[number], string> = {
@@ -64,10 +96,11 @@ const EMPLOYMENT_TYPE_LABELS: Record<(typeof EMPLOYMENT_TYPES)[number], string> 
   open: 'Open to anything',
 }
 
-const NDIS_STATUS_LABELS: Record<(typeof NDIS_STATUS)[number], string> = {
-  yes: 'Yes',
-  no: 'No',
-  unsure: 'Unsure',
+const FUNDING_PLAN_LABELS: Record<(typeof FUNDING_PLAN)[number], string> = {
+  NDIS: 'NDIS plan',
+  TAC: 'TAC',
+  'Work Cover Plan': 'WorkCover plan',
+  Unsure: 'Not sure yet',
 }
 
 function ServiceInterestsField({ draft, onChange }: Props) {
@@ -86,7 +119,7 @@ function ServiceInterestsField({ draft, onChange }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
         {SERVICE_INTERESTS.map((key) => {
           const checked = current.includes(key)
-          const id = `service-${key}`
+          const id = `service-${key.replace(/\W+/g, '-').toLowerCase()}`
           return (
             <label
               key={key}
@@ -126,20 +159,20 @@ function PostcodeField({ draft, onChange }: Props) {
   )
 }
 
-function NdisField({ draft, onChange }: Props) {
+function FundingPlanField({ draft, onChange }: Props) {
   return (
     <label className={labelClass}>
-      <span className={labelTextClass}>Is there a current NDIS plan?</span>
+      <span className={labelTextClass}>What kind of funding plan does the participant have?</span>
       <select
-        value={draft.ndisPlan ?? 'unsure'}
+        value={draft.fundingPlan ?? 'Unsure'}
         onChange={(e) =>
-          onChange({ ndisPlan: e.target.value as (typeof NDIS_STATUS)[number] })
+          onChange({ fundingPlan: e.target.value as (typeof FUNDING_PLAN)[number] })
         }
         className={inputClass}
       >
-        {NDIS_STATUS.map((s) => (
+        {FUNDING_PLAN.map((s) => (
           <option key={s} value={s}>
-            {NDIS_STATUS_LABELS[s]}
+            {FUNDING_PLAN_LABELS[s]}
           </option>
         ))}
       </select>
@@ -200,6 +233,38 @@ function NatureOfDisabilityField({ draft, onChange }: Props) {
   )
 }
 
+function RelationshipField({
+  draft,
+  onChange,
+  options,
+  labelText,
+}: Props & {
+  options: ReadonlyArray<(typeof RELATIONSHIPS)[number]>
+  labelText: string
+}) {
+  return (
+    <label className={labelClass}>
+      <span className={labelTextClass}>{labelText}</span>
+      <select
+        value={draft.relationshipToParticipant ?? ''}
+        onChange={(e) =>
+          onChange({
+            relationshipToParticipant: e.target.value as (typeof RELATIONSHIPS)[number],
+          })
+        }
+        className={inputClass}
+      >
+        <option value="">Please choose…</option>
+        {options.map((r) => (
+          <option key={r} value={r}>
+            {RELATIONSHIP_LABELS[r]}
+          </option>
+        ))}
+      </select>
+    </label>
+  )
+}
+
 function SectionDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 mt-2">
@@ -218,31 +283,18 @@ export function EnquiryStep2({ draft, onChange }: Props) {
             About the person you support.
           </legend>
           <ParticipantNameField draft={draft} onChange={onChange} />
-          <label className={labelClass}>
-            <span className={labelTextClass}>Your relationship to them.</span>
-            <select
-              value={draft.clientRelationship ?? ''}
-              onChange={(e) =>
-                onChange({
-                  clientRelationship: e.target.value as (typeof CLIENT_RELATIONSHIPS)[number],
-                })
-              }
-              className={inputClass}
-            >
-              <option value="">Please choose…</option>
-              {CLIENT_RELATIONSHIPS.map((r) => (
-                <option key={r} value={r}>
-                  {CLIENT_RELATIONSHIP_LABELS[r]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <RelationshipField
+            draft={draft}
+            onChange={onChange}
+            options={FAMILY_RELATIONSHIPS}
+            labelText="Your relationship to them."
+          />
           <NatureOfDisabilityField draft={draft} onChange={onChange} />
 
           <SectionDivider label="Support" />
           <ServiceInterestsField draft={draft} onChange={onChange} />
           <PostcodeField draft={draft} onChange={onChange} />
-          <NdisField draft={draft} onChange={onChange} />
+          <FundingPlanField draft={draft} onChange={onChange} />
           <SupportNeedsField draft={draft} onChange={onChange} />
         </fieldset>
       )
@@ -254,7 +306,7 @@ export function EnquiryStep2({ draft, onChange }: Props) {
         <legend className="text-2xl font-bold leading-tight mb-2">About your enquiry.</legend>
         <ServiceInterestsField draft={draft} onChange={onChange} />
         <PostcodeField draft={draft} onChange={onChange} />
-        <NdisField draft={draft} onChange={onChange} />
+        <FundingPlanField draft={draft} onChange={onChange} />
         <SupportNeedsField draft={draft} onChange={onChange} />
       </fieldset>
     )
@@ -275,29 +327,18 @@ export function EnquiryStep2({ draft, onChange }: Props) {
             className={inputClass}
           />
         </label>
-        <label className={labelClass}>
-          <span className={labelTextClass}>Your role.</span>
-          <select
-            value={draft.referrerRole ?? ''}
-            onChange={(e) =>
-              onChange({ referrerRole: e.target.value as (typeof REFERRER_ROLES)[number] })
-            }
-            className={inputClass}
-          >
-            <option value="">Please choose…</option>
-            {REFERRER_ROLES.map((r) => (
-              <option key={r} value={r}>
-                {REFERRER_ROLE_LABELS[r]}
-              </option>
-            ))}
-          </select>
-        </label>
+        <RelationshipField
+          draft={draft}
+          onChange={onChange}
+          options={PROFESSIONAL_RELATIONSHIPS}
+          labelText="Your role."
+        />
 
         <SectionDivider label="The participant" />
         <ParticipantNameField draft={draft} onChange={onChange} showConsentNote />
         <NatureOfDisabilityField draft={draft} onChange={onChange} />
         <PostcodeField draft={draft} onChange={onChange} />
-        <NdisField draft={draft} onChange={onChange} />
+        <FundingPlanField draft={draft} onChange={onChange} />
 
         <SectionDivider label="Support" />
         <ServiceInterestsField draft={draft} onChange={onChange} />
