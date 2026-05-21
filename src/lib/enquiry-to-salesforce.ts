@@ -1,7 +1,7 @@
 import type { EnquiryPayload } from '@/components/forms/enquiry-schema'
 
 export interface SalesforceWriteTarget {
-  sobject: 'Lead' | 'Case'
+  sobject: 'Lead'
   data: Record<string, unknown>
 }
 
@@ -16,109 +16,113 @@ function splitName(fullName: string): { FirstName: string; LastName: string } {
   }
 }
 
-function buildDescription(p: EnquiryPayload): string {
-  const lines: string[] = []
+export function enquiryToSalesforce(p: EnquiryPayload): SalesforceWriteTarget {
+  const { FirstName, LastName } = splitName(p.fullName)
 
-  if (p.audience === 'client') {
-    lines.push('=== About the enquiry ===')
-    if (p.enquiringFor === 'self') lines.push('Enquiring for: self')
-    if (p.enquiringFor === 'other') {
-      const rel = p.clientRelationship ? ` (${p.clientRelationship})` : ''
-      const name = p.participantFirstName ? p.participantFirstName : 'a person they support'
-      lines.push(`Enquiring on behalf of: ${name}${rel}`)
-    }
-    if (p.natureOfDisability) lines.push(`Nature of disability: ${p.natureOfDisability}`)
-    if (p.serviceInterests?.length)
-      lines.push(`Service interest: ${p.serviceInterests.join(', ')}`)
-    if (p.postcode) lines.push(`Postcode/suburb: ${p.postcode}`)
-    if (p.ndisPlan) lines.push(`NDIS plan: ${p.ndisPlan}`)
-    if (p.supportNeeds) lines.push(`Support requirements: ${p.supportNeeds}`)
-  } else if (p.audience === 'referrer') {
-    lines.push('=== About the enquiry ===')
-    if (p.organisation) lines.push(`Organisation: ${p.organisation}`)
-    if (p.referrerRole) lines.push(`Role: ${p.referrerRole}`)
-    if (p.participantFirstName) lines.push(`Participant first name: ${p.participantFirstName}`)
-    if (p.natureOfDisability) lines.push(`Nature of disability: ${p.natureOfDisability}`)
-    if (p.serviceInterests?.length)
-      lines.push(`Service interest: ${p.serviceInterests.join(', ')}`)
-    if (p.postcode) lines.push(`Postcode/suburb: ${p.postcode}`)
-    if (p.ndisPlan) lines.push(`NDIS plan: ${p.ndisPlan}`)
-    if (p.supportNeeds) lines.push(`Support requirements: ${p.supportNeeds}`)
-  } else {
-    lines.push('=== Career interest ===')
-    if (p.careerRoleInterest) lines.push(`Role: ${p.careerRoleInterest}`)
-    if (p.careerLocation) lines.push(`Preferred location: ${p.careerLocation}`)
-    if (p.employmentType) lines.push(`Employment type: ${p.employmentType}`)
-  }
+  // Company defaults per audience (Lead requires Company)
+  const Company =
+    p.audience === 'career'
+      ? 'Career applicant'
+      : p.audience === 'referrer'
+        ? p.organisation?.trim() || 'Referrer organisation'
+        : 'Personal enquiry'
 
-  if (p.heardFrom && p.heardFrom !== 'prefer-not-to-say') {
-    lines.push('')
-    lines.push('=== Source ===')
-    lines.push(`How they heard: ${p.heardFrom}`)
-  }
-
-  if (p.message) {
-    lines.push('')
-    lines.push('=== Additional notes ===')
-    lines.push(p.message)
-  }
-
-  lines.push('')
-  lines.push(`Privacy consent confirmed at ${new Date().toISOString()}`)
-
-  return lines.join('\n')
-}
-
-export function enquiryToSalesforce(payload: EnquiryPayload): SalesforceWriteTarget {
-  const description = buildDescription(payload)
-
-  if (payload.audience === 'referrer') {
-    return {
-      sobject: 'Case',
-      data: {
-        Subject: `Website enquiry — Referrer${payload.organisation ? ` (${payload.organisation})` : ''}`,
-        Description: [
-          `Contact: ${payload.fullName}`,
-          `Email: ${payload.email}`,
-          payload.phone ? `Phone: ${payload.phone}` : null,
-          '',
-          description,
-        ]
-          .filter((l) => l !== null)
-          .join('\n'),
-        Origin: 'Web',
-        Status: 'New',
-      },
-    }
-  }
-
-  const { FirstName, LastName } = splitName(payload.fullName)
-  const isClient = payload.audience === 'client'
-
-  let Company: string
-  if (isClient) {
-    Company = 'Personal enquiry'
-  } else {
-    // career
-    Company = 'Career applicant'
-  }
+  const LeadSource =
+    p.audience === 'career'
+      ? 'Careers'
+      : p.audience === 'referrer'
+        ? 'Website Demo - Referrer'
+        : 'Website Demo'
 
   const data: Record<string, unknown> = {
     FirstName,
     LastName,
-    Email: payload.email,
-    Phone: payload.phone ?? '',
+    Email: p.email,
+    Phone: p.phone ?? '',
     Company,
-    LeadSource: isClient ? 'Website Demo' : 'Careers',
-    Description: description,
+    LeadSource,
   }
 
-  if (payload.salutation && payload.salutation !== 'prefer-not-to-say') {
-    data.Salutation = payload.salutation
+  // Standard Salutation — omit when user chose "prefer not to say"
+  if (p.salutation && p.salutation !== 'prefer-not-to-say') {
+    data.Salutation = p.salutation
   }
 
-  return {
-    sobject: 'Lead',
-    data,
+  // Is_Enquirer__c (Yes/No/Unsure) — only meaningful for client audience
+  if (p.audience === 'client' && p.enquiringFor === 'self') {
+    data.Is_Enquirer__c = 'Yes'
+  } else if (p.audience === 'client' && p.enquiringFor === 'other') {
+    data.Is_Enquirer__c = 'No'
   }
+
+  // Single relationship field used by client-other and referrer alike
+  if (p.relationshipToParticipant) {
+    data.Relationship_of_Referrer_to_the_Client__c = p.relationshipToParticipant
+  }
+
+  // Participant first name (when enquirer is not the participant, OR when referrer)
+  if (p.participantFirstName) {
+    data.Client_First_name__c = p.participantFirstName
+  }
+
+  // Nature of disability
+  if (p.natureOfDisability) {
+    data.Nature_of_disability__c = p.natureOfDisability
+  }
+
+  // Funding plan
+  if (p.fundingPlan) {
+    data.Current_SDA_funding_in_NDIS_plan__c = p.fundingPlan
+  }
+
+  // Multi-select services — REST API wants semicolon-joined
+  if (p.serviceInterests && p.serviceInterests.length > 0) {
+    data.What_CareChoice_services_are_of_interest__c = p.serviceInterests.join(';')
+  }
+
+  // Support requirements (free text)
+  if (p.supportNeeds) {
+    data.Support_required_Days_times_activities__c = p.supportNeeds
+  }
+
+  // Postcode → address compound sub-field
+  if (p.postcode) {
+    data.Participant_Residential_Address__PostalCode__s = p.postcode
+  }
+
+  // How they heard about us (omit prefer-not-to-say)
+  if (p.heardFrom && p.heardFrom !== 'prefer-not-to-say') {
+    data.How_did_you_hear_about_CareChoice__c = p.heardFrom
+  }
+
+  // Anything else / additional notes
+  if (p.message) {
+    data.Anything_else_you_think_we_should_know__c = p.message
+  }
+
+  // Privacy consent (boolean — required by schema to be true, but defensive)
+  data.I_have_read_and_agree_to_Privacy_Stateme__c = p.privacyConsent === true
+
+  // Career-specific fields don't have dedicated Lead custom fields in this org.
+  // Surface role + location + employment type in the standard Description field
+  // so the intake team can read them.
+  if (p.audience === 'career') {
+    const lines: string[] = ['=== Career enquiry ===']
+    if (p.careerRoleInterest) lines.push(`Role interest: ${p.careerRoleInterest}`)
+    if (p.careerLocation) lines.push(`Preferred location: ${p.careerLocation}`)
+    if (p.employmentType) lines.push(`Employment type: ${p.employmentType}`)
+    if (lines.length > 1) {
+      data.Description = lines.join('\n')
+    }
+  }
+
+  // For referrer: surface organisation in Description too (Lead's Company is set to it; but a
+  // second field makes intake faster)
+  if (p.audience === 'referrer' && p.organisation) {
+    const existing = (data.Description as string) ?? ''
+    const note = `Referrer organisation: ${p.organisation}`
+    data.Description = existing ? `${existing}\n${note}` : note
+  }
+
+  return { sobject: 'Lead', data }
 }
