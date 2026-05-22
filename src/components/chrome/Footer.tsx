@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { Link } from '@/components/primitives/Link'
 import { ContactStrip } from './ContactStrip'
+import { NewsletterSignup } from './NewsletterSignup'
 import { TrustMarks } from './TrustMarks'
 import { InclusionFlags } from './InclusionFlags'
 import type { PayloadLocale } from '@/lib/locale'
@@ -51,6 +52,8 @@ export async function Footer({ locale }: { locale: PayloadLocale }) {
             {aoc}
           </div>
         )}
+
+        <NewsletterSignup />
 
         <TrustMarks />
 
