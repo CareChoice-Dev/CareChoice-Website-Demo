@@ -6,13 +6,17 @@ export const SDAPhotos: CollectionConfig = {
     useAsTitle: 'siteName',
     defaultColumns: ['siteName', 'isHero', 'displayOrder', 'updatedAt'],
     group: 'SDA',
-    components: {
-      views: {
-        list: {
-          Component: 'src/collections/SDASitesView#SDASitesView',
-        },
-      },
-    },
+    // NOTE: Custom Sites Roster list view temporarily unhooked while we debug
+    // a runtime admin crash. The component file lives at
+    // src/collections/SDASitesView.tsx and its importMap entry remains so the
+    // wiring is one edit away from being restored.
+    // components: {
+    //   views: {
+    //     list: {
+    //       Component: 'src/collections/SDASitesView#SDASitesView',
+    //     },
+    //   },
+    // },
   },
   access: { read: () => true },
   versions: { drafts: { autosave: false } },
