@@ -36,6 +36,36 @@ export const Services: CollectionConfig = {
     { name: 'heroImage', type: 'upload',  relationTo: 'media' },
     { name: 'intro',     type: 'textarea', localized: true },
     { name: 'content',   type: 'richText', localized: true },
+    {
+      name: 'whoThisIsFor',
+      type: 'array',
+      localized: true,
+      admin: { description: 'Bulleted "Who this is for" list rendered on /services/<slug>.' },
+      fields: [{ name: 'point', type: 'text', required: true }],
+    },
+    {
+      name: 'whatsIncluded',
+      type: 'array',
+      localized: true,
+      admin: { description: 'Bulleted "What\'s included" list rendered on /services/<slug>.' },
+      fields: [{ name: 'point', type: 'text', required: true }],
+    },
+    {
+      name: 'eligibility',
+      type: 'textarea',
+      localized: true,
+      admin: { description: 'Plain-text "Eligibility & funding" paragraph.' },
+    },
+    {
+      name: 'faq',
+      type: 'array',
+      localized: true,
+      admin: { description: 'Optional FAQ section on /services/<slug>.' },
+      fields: [
+        { name: 'question', type: 'text', required: true },
+        { name: 'answer',   type: 'textarea', required: true },
+      ],
+    },
     { name: 'relatedServices', type: 'relationship', relationTo: 'services', hasMany: true },
     {
       name: 'easyReadPdf',

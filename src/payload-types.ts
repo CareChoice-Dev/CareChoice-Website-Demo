@@ -299,6 +299,38 @@ export interface Service {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Bulleted "Who this is for" list rendered on /services/<slug>.
+   */
+  whoThisIsFor?:
+    | {
+        point: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Bulleted "What's included" list rendered on /services/<slug>.
+   */
+  whatsIncluded?:
+    | {
+        point: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Plain-text "Eligibility & funding" paragraph.
+   */
+  eligibility?: string | null;
+  /**
+   * Optional FAQ section on /services/<slug>.
+   */
+  faq?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
   relatedServices?: (number | Service)[] | null;
   /**
    * Optional downloadable Easy Read PDF version.
@@ -696,6 +728,26 @@ export interface ServicesSelect<T extends boolean = true> {
   heroImage?: T;
   intro?: T;
   content?: T;
+  whoThisIsFor?:
+    | T
+    | {
+        point?: T;
+        id?: T;
+      };
+  whatsIncluded?:
+    | T
+    | {
+        point?: T;
+        id?: T;
+      };
+  eligibility?: T;
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   relatedServices?: T;
   easyReadPdf?: T;
   updatedAt?: T;
