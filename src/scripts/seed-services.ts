@@ -276,21 +276,23 @@ async function main() {
       continue
     }
 
+    const data = {
+      title: s.title,
+      slug: s.slug,
+      category: s.category,
+      fundingTypes: s.fundingTypes,
+      intro: s.intro,
+      whoThisIsFor: s.whoThisIsFor.map((point) => ({ point })),
+      whatsIncluded: s.whatsIncluded.map((point) => ({ point })),
+      eligibility: s.eligibility,
+      faq: s.faq,
+    }
+
     await payload.create({
       collection: 'services',
       locale: 'en',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: {
-        title: s.title,
-        slug: s.slug,
-        category: s.category,
-        fundingTypes: s.fundingTypes,
-        intro: s.intro,
-        whoThisIsFor: s.whoThisIsFor.map((point) => ({ point })),
-        whatsIncluded: s.whatsIncluded.map((point) => ({ point })),
-        eligibility: s.eligibility,
-        faq: s.faq,
-      } as any,
+      data: data as any,
     })
 
     console.log(`Created: ${s.slug}`)

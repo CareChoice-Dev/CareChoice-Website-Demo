@@ -56,7 +56,7 @@ export async function Header({ locale }: { locale: PayloadLocale }) {
                     label={item.label}
                     parentUrl={item.url}
                     hrefPrefix={hrefPrefix}
-                    children={item.children!}
+                    items={item.children!}
                   />
                 )
               }

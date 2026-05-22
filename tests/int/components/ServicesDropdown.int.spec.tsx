@@ -12,7 +12,7 @@ describe('ServicesDropdown', () => {
 
   it('renders the trigger collapsed by default', () => {
     render(
-      <ServicesDropdown label="Disability Services" hrefPrefix="/en" children={children} />,
+      <ServicesDropdown label="Disability Services" hrefPrefix="/en" items={children} />,
     )
     const trigger = screen.getByRole('button', { name: /Disability Services/ })
     expect(trigger).toBeDefined()
@@ -21,7 +21,7 @@ describe('ServicesDropdown', () => {
 
   it('opens the panel on click and exposes the child links', () => {
     render(
-      <ServicesDropdown label="Disability Services" hrefPrefix="/en" children={children} />,
+      <ServicesDropdown label="Disability Services" hrefPrefix="/en" items={children} />,
     )
     const trigger = screen.getByRole('button', { name: /Disability Services/ })
     fireEvent.click(trigger)
@@ -32,7 +32,7 @@ describe('ServicesDropdown', () => {
 
   it('prefixes relative URLs with the locale', () => {
     render(
-      <ServicesDropdown label="Disability Services" hrefPrefix="/vi" children={children} />,
+      <ServicesDropdown label="Disability Services" hrefPrefix="/vi" items={children} />,
     )
     fireEvent.click(screen.getByRole('button', { name: /Disability Services/ }))
     const link = screen.getByRole('menuitem', { name: 'Rapid Hospital Discharge' })
@@ -45,7 +45,7 @@ describe('ServicesDropdown', () => {
         label="Disability Services"
         parentUrl="/services"
         hrefPrefix="/en"
-        children={children}
+        items={children}
       />,
     )
     fireEvent.click(screen.getByRole('button', { name: /Disability Services/ }))

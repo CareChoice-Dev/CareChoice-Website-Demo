@@ -70,16 +70,18 @@ async function main() {
 
   const current = await payload.findGlobal({ slug: 'navigation', locale: 'en' })
 
+  const data = {
+    topNav: TOP_NAV,
+    // preserve existing footer + AoC if set
+    footerColumns: (current?.footerColumns as unknown) ?? [],
+    acknowledgementOfCountry: (current?.acknowledgementOfCountry as string) ?? '',
+  }
+
   await payload.updateGlobal({
     slug: 'navigation',
     locale: 'en',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: {
-      topNav: TOP_NAV as any,
-      // preserve existing footer + AoC if set
-      footerColumns: (current?.footerColumns as unknown) ?? [],
-      acknowledgementOfCountry: (current?.acknowledgementOfCountry as string) ?? '',
-    } as any,
+    data: data as any,
   })
 
   console.log(`Updated Navigation global — topNav has ${TOP_NAV.length} items`)

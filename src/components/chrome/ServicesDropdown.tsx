@@ -17,7 +17,7 @@ export interface ServicesDropdownProps {
   /** Optional URL the parent label itself links to when the user clicks it directly. */
   parentUrl?: string
   /** Child items shown in the dropdown panel. */
-  children: DropdownChild[]
+  items: DropdownChild[]
   /** Locale prefix (e.g. "/en") so internal URLs work in the Link. */
   hrefPrefix: string
   className?: string
@@ -38,7 +38,7 @@ export interface ServicesDropdownProps {
 export function ServicesDropdown({
   label,
   parentUrl,
-  children,
+  items,
   hrefPrefix,
   className,
 }: ServicesDropdownProps) {
@@ -123,15 +123,7 @@ export function ServicesDropdown({
         onKeyDown={handleTriggerKeyDown}
         className="flex items-center gap-1 font-semibold no-underline hover:underline"
       >
-        {parentUrl && open === false ? (
-          // When closed, give users the option to navigate to the parent page
-          // directly via a wrapping link is not possible (would break the button
-          // semantics). Instead, the label remains a button but a secondary
-          // affordance "View all →" lives at the top of the panel.
-          <span>{label}</span>
-        ) : (
-          <span>{label}</span>
-        )}
+        <span>{label}</span>
         <ChevronDown
           className={cn(
             'w-4 h-4 transition-transform duration-[0.15s] motion-reduce:transition-none',
@@ -159,7 +151,7 @@ export function ServicesDropdown({
             </NextLink>
           )}
           <ul className="flex flex-col">
-            {children.map((child, i) => (
+            {items.map((child, i) => (
               <li key={`${child.url}-${i}`}>
                 <NextLink
                   ref={(el) => {
