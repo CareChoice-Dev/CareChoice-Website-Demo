@@ -906,6 +906,20 @@ export interface Navigation {
          * Render as primary button (e.g. "Make an enquiry.").
          */
         highlightAsCta?: boolean | null;
+        /**
+         * Optional dropdown items. When set, the parent renders as a disclosure trigger and these appear in a panel.
+         */
+        children?:
+          | {
+              label: string;
+              url: string;
+              /**
+               * Optional 1-line teaser under the child link.
+               */
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -993,6 +1007,14 @@ export interface NavigationSelect<T extends boolean = true> {
         label?: T;
         url?: T;
         highlightAsCta?: T;
+        children?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+              description?: T;
+              id?: T;
+            };
         id?: T;
       };
   footerColumns?:

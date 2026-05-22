@@ -4,13 +4,22 @@ import config from '@payload-config'
 import { Button } from '@/components/primitives/Button'
 import { Link } from '@/components/primitives/Link'
 import { AccessibilityToolbar } from './AccessibilityToolbar'
+import { ServicesDropdown } from './ServicesDropdown'
+import { MobileNav } from './MobileNav'
 import type { PayloadLocale } from '@/lib/locale'
 import { payloadLocaleToUrlSlug } from '@/lib/locale'
+
+interface NavChild {
+  label: string
+  url: string
+  description?: string
+}
 
 interface NavItem {
   label: string
   url: string
   highlightAsCta?: boolean
+  children?: NavChild[]
 }
 
 export async function Header({ locale }: { locale: PayloadLocale }) {
@@ -26,9 +35,10 @@ export async function Header({ locale }: { locale: PayloadLocale }) {
   const links = topNav.filter((i) => !i.highlightAsCta)
 
   const currentSlug = payloadLocaleToUrlSlug(locale)
+  const hrefPrefix = `/${currentSlug}`
 
   return (
-    <header className="border-b-2 border-cc-black bg-cc-white">
+    <header className="relative border-b-2 border-cc-black bg-cc-white">
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-4 flex flex-col gap-3">
         <div className="flex items-center justify-between gap-6">
           <Link href="/" className="flex items-center gap-2 no-underline" aria-label="CareChoice home">
@@ -37,19 +47,34 @@ export async function Header({ locale }: { locale: PayloadLocale }) {
           </Link>
 
           <nav aria-label="Primary" className="hidden md:flex items-center gap-6">
-            {links.map((item) => (
-              <Link key={item.url} href={item.url} className="font-semibold no-underline hover:underline">
-                {item.label}
-              </Link>
-            ))}
+            {links.map((item) => {
+              const hasChildren = Array.isArray(item.children) && item.children.length > 0
+              if (hasChildren) {
+                return (
+                  <ServicesDropdown
+                    key={`${item.url}-${item.label}`}
+                    label={item.label}
+                    parentUrl={item.url}
+                    hrefPrefix={hrefPrefix}
+                    children={item.children!}
+                  />
+                )
+              }
+              return (
+                <Link key={item.url} href={item.url} className="font-semibold no-underline hover:underline">
+                  {item.label}
+                </Link>
+              )
+            })}
           </nav>
 
           <div className="flex items-center gap-3">
             {ctas.map((cta) => (
-              <Button key={cta.url} href={cta.url} size="md">
+              <Button key={cta.url} href={cta.url} size="md" className="hidden md:inline-flex">
                 {cta.label} ▸
               </Button>
             ))}
+            <MobileNav items={topNav} hrefPrefix={hrefPrefix} />
           </div>
         </div>
 

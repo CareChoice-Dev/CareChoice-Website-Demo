@@ -17,6 +17,23 @@ export const Navigation: GlobalConfig = {
           defaultValue: false,
           admin: { description: 'Render as primary button (e.g. "Make an enquiry.").' },
         },
+        {
+          name: 'children',
+          type: 'array',
+          admin: {
+            description:
+              'Optional dropdown items. When set, the parent renders as a disclosure trigger and these appear in a panel.',
+          },
+          fields: [
+            { name: 'label', type: 'text', required: true },
+            { name: 'url',   type: 'text', required: true },
+            {
+              name: 'description',
+              type: 'text',
+              admin: { description: 'Optional 1-line teaser under the child link.' },
+            },
+          ],
+        },
       ],
     },
     {
