@@ -64,6 +64,11 @@ export default buildConfig({
         media: true,
       },
       token: process.env.BLOB_READ_WRITE_TOKEN,
+      // Direct browser → Vercel Blob upload. Bypasses the 4.5 MB lambda
+      // payload limit AND sidesteps whatever was making server-side
+      // uploads 500 on this project. The lambda only issues a presigned
+      // token; the file streams direct from the browser to Blob.
+      clientUploads: true,
     }),
   ],
 })
