@@ -7,12 +7,19 @@ export interface SDAFilterState {
   region: string
   designStandard: string
   availableOnly: boolean
+  /**
+   * Accessibility tags to match against `SDAVacancy.accessibility`.
+   * Any-match (OR) semantics: a home is kept if it has at least one of these tags.
+   * Used by the Help-me-find-a-home wizard to pre-apply accessibility filters via URL.
+   */
+  accessibility: string[]
 }
 
 export const EMPTY_FILTERS: SDAFilterState = {
   region: '',
   designStandard: '',
   availableOnly: false,
+  accessibility: [],
 }
 
 export function SDAFilters({

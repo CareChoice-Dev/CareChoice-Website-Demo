@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { isUrlSlug } from '@/lib/locale'
 import type { SDAVacancy } from '@/components/sda/types'
 import { SDAGridMapToggle } from '@/components/sda/SDAGridMapToggle'
+import { HelpMeFindAHome } from '@/components/findhome/HelpMeFindAHome'
 import { geocodeAddress } from '@/lib/geocode'
 
 async function fetchAllVacancies(): Promise<{
@@ -59,6 +60,8 @@ export default async function FindAHome({
           {enriched.length > 0 && ` ${enriched.length} homes in this view.`}
         </p>
       </header>
+
+      <HelpMeFindAHome hrefPrefix={hrefPrefix} />
 
       <SDAGridMapToggle vacancies={enriched} hrefPrefix={hrefPrefix} />
 
