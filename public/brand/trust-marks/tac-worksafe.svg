@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 96" role="img" aria-label="TAC and WorkSafe registered provider">
+  <title>TAC and WorkSafe registered provider</title>
+  <rect width="240" height="96" fill="#ffffff"/>
+  <g fill="#0a0a0a" font-family="-apple-system, 'Segoe UI', Arial, sans-serif" font-weight="700" text-anchor="middle">
+    <text x="120" y="22" font-size="10" letter-spacing="2" fill="#7a7a7a">REGISTERED PROVIDER</text>
+    <rect x="20" y="32" width="90" height="44" fill="#0a0a0a"/>
+    <text x="65" y="62" font-size="24" fill="#ffffff">TAC</text>
+    <rect x="130" y="32" width="90" height="44" fill="none" stroke="#0a0a0a" stroke-width="3"/>
+    <text x="175" y="55" font-size="13">WorkSafe</text>
+    <text x="175" y="70" font-size="9" font-weight="600" fill="#7a7a7a">VICTORIA</text>
+  </g>
+</svg>
