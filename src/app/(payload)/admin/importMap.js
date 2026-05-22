@@ -22,6 +22,7 @@ import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997e
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { SDAPhotoSitePickerField as SDAPhotoSitePickerField_e07a47d9416096208f16bc145a1600aa } from 'src/collections/SDAPhotoSitePickerField'
+import { SDASitesView as SDASitesView_3fa2e5420b261213d1de94ffc1b92f44 } from 'src/collections/SDASitesView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -50,5 +51,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "src/collections/SDAPhotoSitePickerField#SDAPhotoSitePickerField": SDAPhotoSitePickerField_e07a47d9416096208f16bc145a1600aa,
+  "src/collections/SDASitesView#SDASitesView": SDASitesView_3fa2e5420b261213d1de94ffc1b92f44,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

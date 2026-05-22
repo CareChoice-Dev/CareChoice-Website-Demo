@@ -6,6 +6,13 @@ export const SDAPhotos: CollectionConfig = {
     useAsTitle: 'siteName',
     defaultColumns: ['siteName', 'isHero', 'displayOrder', 'updatedAt'],
     group: 'SDA',
+    components: {
+      views: {
+        list: {
+          Component: 'src/collections/SDASitesView#SDASitesView',
+        },
+      },
+    },
   },
   access: { read: () => true },
   versions: { drafts: { autosave: false } },
