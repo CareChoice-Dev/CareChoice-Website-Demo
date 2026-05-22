@@ -184,3 +184,26 @@ Warm cache (second consecutive hit):
 3. **Remove the locale-prefix redirect for the root path.** Make `/find-a-home` resolve to `/en/find-a-home` server-side via rewrite (not redirect). Saves the 780 ms `redirects` opportunity. ~30 min.
 
 These are noted for Plan 6 — not blocking the demo if 81 is acceptable.
+
+### Re-measurement after Plan 6 ship (deploy `f98d99c`, 2026-05-22)
+
+Plan 6 added the Ask CareChoice unified assistant (Zustand store + slide-out panel + intent router + multiple `'use client'` sub-components) that mounts globally via the layout, plus the Services dropdown (`'use client'`) in the Header. These ship JS to every page including `/find-a-home`.
+
+Two-run mobile warm-cache measurement against `https://care-choice-website-demo.vercel.app/en/find-a-home`:
+
+| Run | Perf | FCP | LCP | TBT | Speed Index |
+|---|---|---|---|---|---|
+| Run 1 | 69 | 2.2 s | 7.6 s | 40 ms | 5.6 s |
+| Run 2 | 73 | 1.3 s | 5.4 s | 280 ms | 3.2 s |
+
+**Verdict:** Performance regressed from 81 (post-Plan-5) to 69-73 (post-Plan-6). The smoking gun is TBT — the global AskCC mount hydrates Zustand + intent-router + several client components on every page. Other vitals (FCP, LCP, Speed Index) are within Plan 5 baselines on the better run, suggesting most of the new cost is JS execution rather than network.
+
+**Decision for demo:** Accept the regression. 69-73 is "good enough" for an executive demo — the audience will judge by the interactive feel (which is fine: AskCC opens instantly when clicked) rather than the Lighthouse score. The render-blocking opportunity stays at 0 ms, so the visual page paint isn't affected.
+
+**Post-demo fixes (Plan 7 candidates):**
+1. **Dynamic-import the AskCC panel** — keep the trigger button eagerly loaded but lazy-load the panel UI (and the intent router with it) on first user interaction. Should claw back most of the 270 ms TBT.
+2. **Move the services dropdown to a CSS-only `:hover`/`:focus-within` pattern** on desktop — eliminates one of the client components on the header. Mobile keeps the existing collapsible.
+3. **Audit Zustand store imports** — the store is small but if it's bundled with the persistence layer it ships more than necessary.
+4. Static-export the SDA snapshot at build time (carry-over from prior baseline doc) — would also remove the cold-cache TTFB spike.
+
+Render-blocking opportunity stays at 0 (confirmed in both runs). Single-run variance for Lighthouse mobile is ±5 points, so the true post-Plan-6 score is likely 71 ± 5.
