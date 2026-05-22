@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { isUrlSlug } from '@/lib/locale'
 import { SearchUI } from '@/components/search/SearchUI'
+import { AskCCTrigger } from '@/components/ask/AskCCTrigger'
 
 export default async function SearchPage({
   params,
@@ -21,6 +22,23 @@ export default async function SearchPage({
       </header>
 
       <SearchUI />
+
+      <aside
+        aria-labelledby="ask-cc-cta-heading"
+        className="border-4 border-cc-black bg-cc-surface-pink p-6 flex flex-col gap-3"
+      >
+        <p className="eyebrow text-cc-magenta">Faster than searching.</p>
+        <h2 id="ask-cc-cta-heading" className="text-2xl md:text-3xl font-bold leading-tight">
+          Try Ask CareChoice for a direct answer.
+        </h2>
+        <p className="text-base leading-relaxed">
+          Ask in your own words — services, available homes, or how to enquire. Replies come with
+          links to the source pages so you can read deeper.
+        </p>
+        <div>
+          <AskCCTrigger variant="header-icon" />
+        </div>
+      </aside>
     </div>
   )
 }

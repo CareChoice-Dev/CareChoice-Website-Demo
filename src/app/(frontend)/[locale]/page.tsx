@@ -1,6 +1,6 @@
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
-import { Hero } from '@/components/blocks/Hero'
 import { AudiencePathways } from '@/components/blocks/AudiencePathways'
 import { Section } from '@/components/primitives/Section'
 import { SDAPreviewRow } from '@/components/blocks/SDAPreviewRow'
@@ -9,6 +9,7 @@ import { CaseStudySpotlight } from '@/components/blocks/CaseStudySpotlight'
 import { StatsRow } from '@/components/blocks/StatsRow'
 import { NewsCardRow } from '@/components/blocks/NewsCardRow'
 import { Link } from '@/components/primitives/Link'
+import { AskCCTrigger } from '@/components/ask/AskCCTrigger'
 
 export default async function HomePage({
   params,
@@ -22,15 +23,30 @@ export default async function HomePage({
 
   return (
     <div className="flex flex-col gap-0">
-      <div className="max-w-[1280px] mx-auto px-6 md:px-8 pt-10 pb-0 w-full">
-        <Hero
-          title="Live the life you choose."
-          lead="We'll be there. For thirty years CareChoice has supported people with disability across Australia — in their homes, in our homes, and out in their communities."
-          ctas={[
-            { label: 'Find a home.', href: '/find-a-home' },
-            { label: 'Our services.', href: '/services' },
-          ]}
-        />
+      <div className="max-w-[1280px] mx-auto px-6 md:px-8 pt-10 pb-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+          <div className="flex flex-col gap-6">
+            <Image
+              src="/brand/logo-stacked-tagline.png"
+              alt="CareChoice. Taking care further."
+              width={360}
+              height={235}
+              priority
+              className="max-w-[280px] md:max-w-[360px] h-auto"
+            />
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight">
+              Find the right home, support, and team. With confidence.
+            </h1>
+            <p className="text-lg leading-relaxed max-w-prose">
+              For thirty years CareChoice has supported people with disability across Australia —
+              in their homes, in our homes, and out in their communities. Ask us anything.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3">
+            <p className="eyebrow text-cc-magenta">Ask CareChoice.</p>
+            <AskCCTrigger variant="hero" />
+          </div>
+        </div>
       </div>
 
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 w-full">
