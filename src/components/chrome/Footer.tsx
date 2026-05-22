@@ -2,6 +2,8 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { Link } from '@/components/primitives/Link'
 import { ContactStrip } from './ContactStrip'
+import { TrustMarks } from './TrustMarks'
+import { InclusionFlags } from './InclusionFlags'
 import type { PayloadLocale } from '@/lib/locale'
 
 interface FooterColumn {
@@ -49,6 +51,10 @@ export async function Footer({ locale }: { locale: PayloadLocale }) {
             {aoc}
           </div>
         )}
+
+        <TrustMarks />
+
+        <InclusionFlags />
 
         <div className="flex flex-wrap gap-4 text-xs border-t-2 border-cc-black pt-4">
           <Link href="/privacy">Privacy.</Link>
