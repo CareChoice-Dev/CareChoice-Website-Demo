@@ -42,9 +42,15 @@ export async function Header({ locale }: { locale: PayloadLocale }) {
     <header className="relative border-b-2 border-cc-black bg-cc-white">
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-4 flex flex-col gap-3">
         <div className="flex items-center justify-between gap-6">
-          <Link href="/" className="flex items-center gap-2 no-underline" aria-label="CareChoice home">
-            <Image src="/brand/logo-magenta.svg" alt="" width={120} height={32} className="h-8 w-auto" priority />
-            <span className="sr-only">CareChoice</span>
+          <Link href="/" className="flex items-center no-underline" aria-label="CareChoice home">
+            <Image
+              src="/brand/logo-stacked-tagline.png"
+              alt="CareChoice. Taking care further."
+              width={200}
+              height={130}
+              className="h-16 w-auto"
+              priority
+            />
           </Link>
 
           <nav aria-label="Primary" className="hidden md:flex items-center gap-6">

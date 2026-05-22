@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
 import { AudiencePathways } from '@/components/blocks/AudiencePathways'
@@ -26,14 +25,6 @@ export default async function HomePage({
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 pt-10 pb-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
           <div className="flex flex-col gap-6">
-            <Image
-              src="/brand/logo-stacked-tagline.png"
-              alt="CareChoice. Taking care further."
-              width={360}
-              height={235}
-              priority
-              className="max-w-[280px] md:max-w-[360px] h-auto"
-            />
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight">
               Find the right home, support, and team. With confidence.
             </h1>
