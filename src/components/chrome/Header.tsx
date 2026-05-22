@@ -6,6 +6,7 @@ import { Link } from '@/components/primitives/Link'
 import { AccessibilityToolbar } from './AccessibilityToolbar'
 import { ServicesDropdown } from './ServicesDropdown'
 import { MobileNav } from './MobileNav'
+import { AskCCTrigger } from '@/components/ask/AskCCTrigger'
 import type { PayloadLocale } from '@/lib/locale'
 import { payloadLocaleToUrlSlug } from '@/lib/locale'
 
@@ -78,7 +79,8 @@ export async function Header({ locale }: { locale: PayloadLocale }) {
           </div>
         </div>
 
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end gap-3">
+          <AskCCTrigger variant="header-icon" />
           <AccessibilityToolbar currentLocale={currentSlug} />
         </div>
       </div>
