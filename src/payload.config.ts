@@ -69,6 +69,13 @@ export default buildConfig({
       // uploads 500 on this project. The lambda only issues a presigned
       // token; the file streams direct from the browser to Blob.
       clientUploads: true,
+      // Plugin default is false, which means the file is stored at the
+      // EXACT user-provided filename. Files with spaces or other URL-
+      // unsafe characters then get rejected with a 400 from Vercel Blob,
+      // and re-uploads of the same filename hit "blob already exists".
+      // Setting true makes Vercel Blob append a random hash, sanitising
+      // the filename and side-stepping collisions.
+      addRandomSuffix: true,
     }),
   ],
 })
