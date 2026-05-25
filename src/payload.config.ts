@@ -78,6 +78,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    // One-off scripts (delete-smoke-test etc.) set PAYLOAD_DB_PUSH=false so
+    // they don't hang on the interactive "accept schema changes?" prompt.
+    push: process.env.PAYLOAD_DB_PUSH === 'false' ? false : undefined,
   }),
   sharp,
   plugins: [

@@ -94,9 +94,12 @@ function resetAudienceScopedFields(draft: EnquiryDraft): EnquiryDraft {
 export function EnquiryForm({
   confirmationPath,
   privacyPath,
+  phoneNumber = '1300 737 942',
 }: {
   confirmationPath: string
   privacyPath: string
+  /** Display phone number for the "prefer to talk" callout. Falls back to the default. */
+  phoneNumber?: string
 }) {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [draft, setDraft] = useState<EnquiryDraft>(INITIAL_DRAFT)
@@ -152,6 +155,8 @@ export function EnquiryForm({
     }
   }
 
+  const phoneHref = `tel:${phoneNumber.replace(/\s+/g, '')}`
+
   return (
     <div className="flex flex-col gap-6">
       <ol className="flex gap-0">
@@ -167,6 +172,35 @@ export function EnquiryForm({
           </li>
         ))}
       </ol>
+
+      <div
+        role="note"
+        className="flex flex-wrap items-center justify-between gap-3 border-2 border-cc-black bg-cc-surface-pink px-4 py-3 text-sm"
+      >
+        <span>
+          <span className="font-semibold">Prefer to talk?</span> Call our intake team on{' '}
+          business days.
+        </span>
+        <a
+          href={phoneHref}
+          className="inline-flex items-center gap-2 font-semibold text-cc-black hover:underline focus-visible:outline-2 focus-visible:outline-cc-magenta focus-visible:outline-offset-2"
+          aria-label={`Call CareChoice on ${phoneNumber}`}
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.33 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z" />
+          </svg>
+          {phoneNumber}
+        </a>
+      </div>
 
       <Module weight="card" className="p-6 md:p-8">
         {step === 1 && (

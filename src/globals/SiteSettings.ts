@@ -18,6 +18,21 @@ export const SiteSettings: GlobalConfig = {
       defaultValue: 'enquiries@carechoice.com.au',
     },
     {
+      name: 'ndisProviderNumber',
+      type: 'text',
+      admin: {
+        description:
+          'NDIS provider registration number — surfaces in the footer for compliance. Format e.g. 4050037561 (10 digits, no spaces).',
+      },
+    },
+    {
+      name: 'abn',
+      type: 'text',
+      admin: {
+        description: 'Australian Business Number — surfaces in the footer alongside the NDIS provider number.',
+      },
+    },
+    {
       name: 'agentforceDeploymentId',
       type: 'text',
       admin: { description: 'Salesforce Embedded Service Deployment ID (from Cam in week 2).' },

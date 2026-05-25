@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { isUrlSlug } from '@/lib/locale'
 import { EnquiryForm } from '@/components/forms/EnquiryForm'
 
@@ -9,6 +11,11 @@ export default async function EnquiryPage({
 }) {
   const { locale: urlLocale } = await params
   if (!isUrlSlug(urlLocale)) notFound()
+
+  const payload = await getPayload({ config })
+  const settings = await payload.findGlobal({ slug: 'site-settings' })
+  const phoneNumber =
+    ((settings?.phoneNumber as string | undefined)?.trim() || '') || '1300 737 942'
 
   return (
     <div className="max-w-[800px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-8">
@@ -25,6 +32,7 @@ export default async function EnquiryPage({
       <EnquiryForm
         confirmationPath={`/${urlLocale}/enquiry/confirmation`}
         privacyPath={`/${urlLocale}/privacy`}
+        phoneNumber={phoneNumber}
       />
     </div>
   )

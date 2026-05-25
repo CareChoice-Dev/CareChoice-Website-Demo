@@ -71,11 +71,35 @@ export function SDAHeroGallery({ homeName, photos }: SDAHeroGalleryProps) {
             )}
           </>
         ) : (
-          <div className="flex flex-col gap-2 items-center text-cc-black">
-            <span className="eyebrow">Photo coming soon.</span>
-            <span className="text-sm">
-              Photography for {homeName} is being added by the team.
-            </span>
+          <div className="relative w-full h-full bg-gradient-to-br from-cc-magenta to-cc-pms-675 flex flex-col items-center justify-center gap-4 p-6 text-center">
+            {/* Decorative house silhouette so the placeholder reads as branded, not broken */}
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 64 64"
+              className="w-20 h-20 md:w-24 md:h-24 text-cc-white/90"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={3}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="8,32 32,12 56,32" />
+              <path d="M14 30v22h36V30" />
+              <rect x="28" y="38" width="8" height="14" />
+            </svg>
+            <div className="flex flex-col gap-1 text-cc-white">
+              <span className="eyebrow">Walkthrough on request.</span>
+              <p className="text-sm md:text-base max-w-md mx-auto">
+                Photos of {homeName} are coming. Until they land, we can arrange an in-person or
+                video walkthrough so you can see the home properly.
+              </p>
+            </div>
+            <a
+              href="/en/enquiry"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-cc-white text-cc-black font-semibold border-2 border-cc-black shadow-hard-btn hover:bg-cc-surface-pink focus-visible:outline-2 focus-visible:outline-cc-white focus-visible:outline-offset-2"
+            >
+              Request a walkthrough ▸
+            </a>
           </div>
         )}
       </div>

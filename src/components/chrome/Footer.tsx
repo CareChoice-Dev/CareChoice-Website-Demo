@@ -14,16 +14,17 @@ interface FooterColumn {
 
 export async function Footer({ locale }: { locale: PayloadLocale }) {
   const payload = await getPayload({ config })
-  const nav = await payload.findGlobal({
-    slug: 'navigation',
-    locale,
-    fallbackLocale: 'en',
-  })
+  const [nav, settings] = await Promise.all([
+    payload.findGlobal({ slug: 'navigation', locale, fallbackLocale: 'en' }),
+    payload.findGlobal({ slug: 'site-settings' }),
+  ])
 
   const columns: FooterColumn[] = Array.isArray(nav?.footerColumns)
     ? (nav.footerColumns as FooterColumn[])
     : []
   const aoc = (nav?.acknowledgementOfCountry as string) ?? ''
+  const ndisProviderNumber = (settings?.ndisProviderNumber as string | undefined)?.trim()
+  const abn = (settings?.abn as string | undefined)?.trim()
 
   return (
     <footer className="bg-cc-magenta text-cc-black border-t-[7px] border-cc-black mt-16">
@@ -59,10 +60,15 @@ export async function Footer({ locale }: { locale: PayloadLocale }) {
 
         <InclusionFlags />
 
-        <div className="flex flex-wrap gap-4 text-xs border-t-2 border-cc-black pt-4">
+        <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs border-t-2 border-cc-black pt-4">
           <Link href="/privacy">Privacy.</Link>
           <Link href="/accessibility">Accessibility statement.</Link>
-          <span>ABN — TBA</span>
+          {ndisProviderNumber ? (
+            <span>NDIS provider — {ndisProviderNumber}.</span>
+          ) : (
+            <span className="opacity-70">NDIS provider — set in /admin.</span>
+          )}
+          <span>ABN — {abn || 'TBA'}.</span>
           <span>© CareChoice {new Date().getFullYear()}.</span>
         </div>
       </div>
