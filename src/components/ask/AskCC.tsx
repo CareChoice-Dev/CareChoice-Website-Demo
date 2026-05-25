@@ -65,17 +65,33 @@ export function AskCC() {
     return () => window.removeEventListener('keydown', handler)
   }, [togglePanel])
 
-  // Focus management — record previous focus when opening, restore on close
+  // Focus management — record previous focus when opening, restore on close.
+  // Skip restoration for trigger elements (data-askcc-trigger or any descendant
+  // of one) — re-focusing them fires their onFocus/onClick handlers and re-opens
+  // the panel, which is what the user just dismissed.
   useEffect(() => {
     if (open) {
-      lastFocusRef.current = document.activeElement as HTMLElement | null
+      const active = document.activeElement as HTMLElement | null
+      const isTrigger =
+        active?.closest('[data-askcc-trigger]') !== null ||
+        active?.id === 'askcc-hero-input'
+      lastFocusRef.current = isTrigger ? null : active
       // Small delay so the input is in the DOM and animation has started
       requestAnimationFrame(() => {
         inputRef.current?.focus()
       })
     } else if (lastFocusRef.current) {
-      lastFocusRef.current.focus()
+      try {
+        lastFocusRef.current.focus()
+      } catch {
+        /* element may have been removed from the DOM — silently noop */
+      }
       lastFocusRef.current = null
+    } else if (panelRef.current?.contains(document.activeElement)) {
+      // No safe restore target (panel was opened via a trigger with side
+      // effects). Blur the panel's input so focus doesn't stay trapped
+      // off-screen.
+      ;(document.activeElement as HTMLElement | null)?.blur()
     }
   }, [open])
 
