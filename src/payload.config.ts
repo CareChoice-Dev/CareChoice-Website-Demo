@@ -24,18 +24,27 @@ import { EmergencyBanner } from './globals/EmergencyBanner'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// When a Vercel project has multiple Blob stores connected, the second
-// store's token is exposed under a prefixed env var (e.g. the public
-// `care-choice-website-demo-blob` store with prefix `Blob_Pub` lands at
-// `BLOB_PUB_BLOB_READ_WRITE_TOKEN`). Promote it to the canonical
-// `BLOB_READ_WRITE_TOKEN` at module load so every downstream call —
-// the storage plugin, @vercel/blob library helpers, our custom server
-// route — keeps reading from one place.
-//
-// Safe to remove once the old private store's env var is deleted in
-// the Vercel dashboard and the public store's prefix is cleared.
-if (process.env.BLOB_PUB_BLOB_READ_WRITE_TOKEN) {
-  process.env.BLOB_READ_WRITE_TOKEN = process.env.BLOB_PUB_BLOB_READ_WRITE_TOKEN
+// The project has two Vercel Blob stores connected — an old private
+// one owning the unprefixed `BLOB_READ_WRITE_TOKEN`, and a new public
+// one whose env var carries whichever prefix Vercel chose (e.g.
+// `Bolb_Pub_READ_WRITE_TOKEN`). The Payload plugin only supports
+// public-access blobs, so we want the prefixed one whenever it exists.
+// Scan all env vars ending in `_READ_WRITE_TOKEN` and promote the first
+// non-default one to the canonical `BLOB_READ_WRITE_TOKEN` at module
+// load so the storage plugin, @vercel/blob library helpers, and our
+// custom routes all read from one place. Idempotent once the dashboard
+// is cleaned up (only `BLOB_READ_WRITE_TOKEN` remains → no-op).
+for (const [key, value] of Object.entries(process.env)) {
+  if (
+    key !== 'BLOB_READ_WRITE_TOKEN' &&
+    key.endsWith('_READ_WRITE_TOKEN') &&
+    typeof value === 'string' &&
+    value.startsWith('vercel_blob_rw_') &&
+    value !== process.env.BLOB_READ_WRITE_TOKEN
+  ) {
+    process.env.BLOB_READ_WRITE_TOKEN = value
+    break
+  }
 }
 
 export default buildConfig({

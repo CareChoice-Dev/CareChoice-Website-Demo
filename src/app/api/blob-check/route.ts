@@ -1,11 +1,21 @@
 import { list, put, del, BlobError } from '@vercel/blob'
 import { generateClientTokenFromReadWriteToken } from '@vercel/blob/client'
 
-// Mirror the override in payload.config.ts so that runtimes which load
-// this diagnostic without going through Payload still see the right
-// token. Safe to remove once the Vercel env var prefix is cleared.
-if (process.env.BLOB_PUB_BLOB_READ_WRITE_TOKEN) {
-  process.env.BLOB_READ_WRITE_TOKEN = process.env.BLOB_PUB_BLOB_READ_WRITE_TOKEN
+// Mirror the override in payload.config.ts so this diagnostic sees the
+// same token the plugin does. Picks up any prefixed `*_READ_WRITE_TOKEN`
+// pointing to a different blob store. Safe to remove once the Vercel
+// dashboard is cleaned up (only `BLOB_READ_WRITE_TOKEN` remains).
+for (const [key, value] of Object.entries(process.env)) {
+  if (
+    key !== 'BLOB_READ_WRITE_TOKEN' &&
+    key.endsWith('_READ_WRITE_TOKEN') &&
+    typeof value === 'string' &&
+    value.startsWith('vercel_blob_rw_') &&
+    value !== process.env.BLOB_READ_WRITE_TOKEN
+  ) {
+    process.env.BLOB_READ_WRITE_TOKEN = value
+    break
+  }
 }
 
 /**
