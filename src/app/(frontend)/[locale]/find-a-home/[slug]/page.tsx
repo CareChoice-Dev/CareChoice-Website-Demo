@@ -1,6 +1,11 @@
 import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
 import { isUrlSlug } from '@/lib/locale'
+
+// Force-dynamic so every request re-runs the page render (including the
+// /api/sda-vacancies fetch). cache: 'no-store' on the fetch alone wasn't
+// enough — Next.js's per-page cache still memoised the result.
+export const dynamic = 'force-dynamic'
 import type { SDAVacancy } from '@/components/sda/types'
 import { Tag } from '@/components/primitives/Tag'
 import { Section } from '@/components/primitives/Section'
@@ -14,11 +19,8 @@ async function fetchVacancy(id: string): Promise<SDAVacancy | null> {
   const h = await headers()
   const proto = h.get('x-forwarded-proto') ?? 'http'
   const host = h.get('host') ?? 'localhost:3000'
-  // No-store: Next.js's `revalidate` fetch cache wasn't busting reliably
-  // after SDAPhotos edits, leaving newly-added photos hidden until a redeploy.
-  // The vacancies payload is small (<50 records) so the lambda perf hit is
-  // negligible for the demo.
-  const res = await fetch(`${proto}://${host}/api/sda-vacancies`, {
+  // Cache-bust the URL itself so any layered Vercel/CDN cache misses.
+  const res = await fetch(`${proto}://${host}/api/sda-vacancies?t=${Date.now()}`, {
     cache: 'no-store',
   })
   if (!res.ok) return null
