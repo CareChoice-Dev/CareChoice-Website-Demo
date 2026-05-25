@@ -5,11 +5,17 @@ export const Media: CollectionConfig = {
   upload: {
     staticDir: 'media',
     mimeTypes: ['image/*', 'video/*', 'application/pdf'],
-    imageSizes: [
-      { name: 'thumbnail', width: 400,  height: 300, position: 'centre' },
-      { name: 'card',      width: 800,  height: 600, position: 'centre' },
-      { name: 'hero',      width: 1600, height: 900, position: 'centre' },
-    ],
+    // imageSizes intentionally removed — when combined with the Vercel
+    // Blob plugin's `addRandomSuffix:true`, the adapter mutates
+    // `data.filename` once per size upload (see
+    // node_modules/@payloadcms/storage-vercel-blob/dist/adapter.js).
+    // The last size's randomly-suffixed name overwrites the main file's
+    // filename, leaving Payload pointing at an object that doesn't
+    // exist in Blob and the `/api/media/file/...` proxy 404s.
+    // next/image handles responsive sizing at request time, so the loss
+    // is minimal. Restore once the plugin separates main-vs-size filename
+    // handling.
+    //
   },
   admin: {
     useAsTitle: 'filename',

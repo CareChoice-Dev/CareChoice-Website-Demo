@@ -87,7 +87,11 @@ export default buildConfig({
     vercelBlobStorage({
       enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
       collections: {
-        media: true,
+        // disablePayloadAccessControl flips the doc's `url` field from
+        // the Payload proxy (`/api/media/file/<filename>`) to the
+        // direct Blob URL. Faster (no lambda hop), and sidesteps the
+        // proxy logic that was 404ing on docs with clobbered filenames.
+        media: { disablePayloadAccessControl: true },
       },
       token: process.env.BLOB_READ_WRITE_TOKEN,
       // Direct browser → Vercel Blob upload. Bypasses the 4.5 MB lambda
