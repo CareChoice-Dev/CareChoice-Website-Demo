@@ -1,45 +1,85 @@
-import { list, BlobError } from '@vercel/blob'
+import { list, put, del, BlobError } from '@vercel/blob'
+import { generateClientTokenFromReadWriteToken } from '@vercel/blob/client'
 
 /**
- * Diagnostic for Vercel Blob env wiring. Tells us:
- *   - whether BLOB_READ_WRITE_TOKEN is present
- *   - the storeId extracted from the token (no random/secret leak)
- *   - whether the token + store are accepted by Vercel right now
- *     (via a 1-blob `list` call — fastest non-mutating probe)
+ * Diagnostic for Vercel Blob env wiring. Three probes:
+ *   - list({ token })       → confirms token + store accept reads
+ *   - put + del              → confirms server-side writes work via
+ *                              the same `vercel.com/api/blob/` API
+ *                              the client SDK uses
+ *   - generateClientToken    → mints a client token server-side so
+ *                              we can inspect the format Vercel
+ *                              should be accepting (no leak — only
+ *                              prefix shown)
  *
  * Hit it via `GET /api/blob-check`.
  */
 export async function GET() {
   const token = process.env.BLOB_READ_WRITE_TOKEN ?? null
-
-  // Token format: vercel_blob_rw_<storeId>_<random>
-  // The storeId is what gets embedded in client tokens and what
-  // Vercel uses to identify the blob store on read/write.
   const parts = token ? token.split('_') : []
   const storeId = parts[3] ?? null
 
-  let probe: { ok: boolean; error?: string; sample?: number } = { ok: false }
-  if (token) {
-    try {
-      const result = await list({ token, limit: 1 })
-      probe = { ok: true, sample: result.blobs.length }
-    } catch (err) {
-      const message =
-        err instanceof BlobError
-          ? err.message
-          : err instanceof Error
-          ? err.message
-          : String(err)
-      probe = { ok: false, error: message }
-    }
-  }
-
-  return Response.json({
+  const out: Record<string, unknown> = {
     hasToken: Boolean(token),
     tokenPrefix: token ? token.slice(0, 15) : null,
     storeId,
     tokenLength: token ? token.length : 0,
     region: process.env.VERCEL_REGION ?? null,
-    probe,
-  })
+  }
+
+  if (!token) return Response.json(out)
+
+  // Probe 1: list — proven to work; keep as a baseline.
+  try {
+    const r = await list({ token, limit: 1 })
+    out.listProbe = { ok: true, count: r.blobs.length }
+  } catch (err) {
+    out.listProbe = { ok: false, error: errorMessage(err) }
+  }
+
+  // Probe 2: server-side put + del — does the same vercel.com/api/blob
+  // endpoint accept a write from this token?
+  try {
+    const r = await put('_diag/probe.txt', 'probe', {
+      token,
+      access: 'public',
+      addRandomSuffix: true,
+      allowOverwrite: true,
+      contentType: 'text/plain',
+    })
+    out.putProbe = { ok: true, url: r.url }
+    try {
+      await del(r.url, { token })
+    } catch {
+      // best-effort cleanup; ignore
+    }
+  } catch (err) {
+    out.putProbe = { ok: false, error: errorMessage(err) }
+  }
+
+  // Probe 3: generate a client token and report its shape. We're not
+  // executing the PUT — that has to come from the browser. But the
+  // prefix tells us if our SDK is producing the format Vercel expects.
+  try {
+    const clientToken = await generateClientTokenFromReadWriteToken({
+      token,
+      pathname: 'diag/probe.txt',
+      addRandomSuffix: true,
+    })
+    out.clientTokenProbe = {
+      ok: true,
+      prefix: clientToken.slice(0, 40),
+      length: clientToken.length,
+    }
+  } catch (err) {
+    out.clientTokenProbe = { ok: false, error: errorMessage(err) }
+  }
+
+  return Response.json(out)
+}
+
+function errorMessage(err: unknown): string {
+  if (err instanceof BlobError) return err.message
+  if (err instanceof Error) return err.message
+  return String(err)
 }
