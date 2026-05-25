@@ -27,7 +27,8 @@
     "seed:services": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/seed-services.ts",
     "seed:navigation": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/seed-navigation.ts",
     "seed:case-studies": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/seed-case-studies.ts",
-    "delete-smoke-test": "cross-env PAYLOAD_DB_PUSH=false NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/delete-smoke-test-content.ts"
+    "delete-smoke-test": "cross-env PAYLOAD_DB_PUSH=false NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/delete-smoke-test-content.ts",
+    "push-schema": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/push-schema.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.84.1",
