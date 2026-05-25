@@ -9,6 +9,22 @@
   .shadow-hard-btn  { box-shadow: var(--cc-shadow-btn-hover); }
 }
 
+/* Ask CareChoice panel pushes desktop content instead of overlaying it
+   (mobile keeps the full-width modal pattern). */
+body {
+  transition: padding-right 300ms ease-out;
+}
+@media (min-width: 768px) {
+  body.askcc-open {
+    padding-right: 420px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
+}
+
 /* ============================================================
    EASY READ THEME — applied via <html data-easy-read="true">
    Body 20-22px Regular, max line length 50 chars, muted brand.

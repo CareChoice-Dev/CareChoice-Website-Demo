@@ -32,7 +32,8 @@ describe('AskCC smoke render', () => {
     const { container } = render(<AskCC />)
     const dialog = container.querySelector('aside[role="dialog"]')
     expect(dialog).not.toBeNull()
-    expect(dialog!.getAttribute('aria-modal')).toBe('true')
+    // Non-modal — desktop pushes content rather than blocking it.
+    expect(dialog!.getAttribute('aria-modal')).toBeNull()
     expect(dialog!.getAttribute('aria-label')).toBe('Ask CareChoice')
   })
 

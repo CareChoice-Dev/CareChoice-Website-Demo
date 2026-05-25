@@ -79,32 +79,24 @@ export function AskCC() {
     }
   }, [open])
 
-  // Esc closes; hand-rolled focus trap with Tab/Shift+Tab
+  // Push the body content left on desktop so the panel narrows the page
+  // (Salesforce-style) instead of overlaying it. CSS handles the transition
+  // and the md+ breakpoint.
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    document.body.classList.toggle('askcc-open', open)
+    return () => {
+      document.body.classList.remove('askcc-open')
+    }
+  }, [open])
+
+  // Esc closes — no focus trap, the rest of the page stays interactive.
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault()
         closePanel()
-        return
-      }
-      if (e.key !== 'Tab') return
-      const panel = panelRef.current
-      if (!panel) return
-      const focusables = panel.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      )
-      if (focusables.length === 0) return
-      const first = focusables[0]
-      const last = focusables[focusables.length - 1]
-      const activeEl = document.activeElement as HTMLElement | null
-      if (!activeEl) return
-      if (e.shiftKey && activeEl === first) {
-        e.preventDefault()
-        last.focus()
-      } else if (!e.shiftKey && activeEl === last) {
-        e.preventDefault()
-        first.focus()
       }
     }
     window.addEventListener('keydown', onKey)
@@ -135,7 +127,7 @@ export function AskCC() {
 
   return (
     <>
-      {/* Backdrop on mobile */}
+      {/* Backdrop on mobile only — desktop pushes content instead */}
       {open && (
         <button
           type="button"
@@ -149,7 +141,6 @@ export function AskCC() {
       <aside
         ref={panelRef}
         role="dialog"
-        aria-modal="true"
         aria-label="Ask CareChoice"
         aria-hidden={!open}
         className={`fixed top-0 right-0 z-50 h-full w-full md:w-[420px] bg-cc-white border-l-4 border-cc-black shadow-hard-card flex flex-col transition-transform duration-300 ease-out motion-reduce:transition-none ${
