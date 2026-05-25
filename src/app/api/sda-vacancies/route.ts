@@ -40,29 +40,38 @@ const SOQL = `
 
 async function fetchPhotosBySiteId(): Promise<Map<string, SDAPhotoRef[]>> {
   const payload = await getPayloadClient()
+  // Schema is now one SDAPhotos doc per site, with a `photos` array.
+  // depth:2 ensures `photos[].media` (an upload relationship) is populated
+  // with the full Media doc instead of just an ID.
   const result = await payload.find({
     collection: 'sda-photos',
     limit: 200,
-    sort: 'displayOrder',
+    depth: 2,
   })
 
   const grouped = new Map<string, SDAPhotoRef[]>()
   for (const doc of result.docs as Array<{
     siteId: string
-    isHero?: boolean
-    media: { url?: string; alt?: string } | string | number
+    photos?: Array<{
+      media: { url?: string; alt?: string } | string | number
+      isHero?: boolean
+      caption?: string | null
+    }>
   }>) {
-    const media = typeof doc.media === 'object' ? doc.media : null
-    if (!media?.url) continue
-    const ref: SDAPhotoRef = {
-      url: media.url,
-      alt: media.alt ?? '',
-      isHero: Boolean(doc.isHero),
+    const refs: SDAPhotoRef[] = []
+    for (const photo of doc.photos ?? []) {
+      const media = typeof photo.media === 'object' ? photo.media : null
+      if (!media?.url) continue
+      refs.push({
+        url: media.url,
+        alt: media.alt ?? '',
+        isHero: Boolean(photo.isHero),
+      })
     }
-    const arr = grouped.get(doc.siteId) ?? []
-    if (ref.isHero) arr.unshift(ref)
-    else arr.push(ref)
-    grouped.set(doc.siteId, arr)
+    // Stable sort: hero photo(s) bubble to front, otherwise array order
+    // (Payload preserves admin-defined row order) is kept intact.
+    refs.sort((a, b) => Number(b.isHero) - Number(a.isHero))
+    if (refs.length > 0) grouped.set(doc.siteId, refs)
   }
   return grouped
 }
