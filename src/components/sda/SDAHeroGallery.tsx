@@ -48,19 +48,23 @@ export function SDAHeroGallery({ homeName, photos }: SDAHeroGalleryProps) {
                   type="button"
                   onClick={prev}
                   aria-label="Previous photo"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 size-11 grid place-items-center bg-cc-white/90 hover:bg-cc-white border-2 border-cc-black text-cc-black text-xl font-bold shadow-hard-btn focus:outline-none focus-visible:ring-2 focus-visible:ring-cc-magenta"
+                  className="group absolute left-4 top-1/2 -translate-y-1/2 size-12 md:size-14 grid place-items-center bg-cc-black hover:bg-cc-magenta text-cc-white border-2 border-cc-black shadow-hard-btn transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-cc-magenta"
                 >
-                  ‹
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" className="size-6 md:size-7" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
                 </button>
                 <button
                   type="button"
                   onClick={next}
                   aria-label="Next photo"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 size-11 grid place-items-center bg-cc-white/90 hover:bg-cc-white border-2 border-cc-black text-cc-black text-xl font-bold shadow-hard-btn focus:outline-none focus-visible:ring-2 focus-visible:ring-cc-magenta"
+                  className="group absolute right-4 top-1/2 -translate-y-1/2 size-12 md:size-14 grid place-items-center bg-cc-black hover:bg-cc-magenta text-cc-white border-2 border-cc-black shadow-hard-btn transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-cc-magenta"
                 >
-                  ›
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" className="size-6 md:size-7" aria-hidden="true">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
                 </button>
-                <div className="absolute right-3 bottom-3 px-2 py-1 bg-cc-black/80 text-cc-white text-xs tabular-nums">
+                <div className="absolute right-4 bottom-4 px-3 py-1.5 bg-cc-black text-cc-white text-sm font-semibold tabular-nums border-2 border-cc-black shadow-hard-btn">
                   {index + 1} / {count}
                 </div>
               </>
