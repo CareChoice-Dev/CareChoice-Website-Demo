@@ -10,7 +10,7 @@ async function fetchTopVacancies(limit = 4): Promise<SDAVacancy[]> {
   const proto = h.get('x-forwarded-proto') ?? 'http'
   const host = h.get('host') ?? 'localhost:3000'
   const res = await fetch(`${proto}://${host}/api/sda-vacancies`, {
-    next: { revalidate: 600 },
+    next: { revalidate: 30, tags: ['sda-vacancies'] },
   })
   if (!res.ok) return []
   const data: { vacancies: SDAVacancy[] } = await res.json()

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 export const SDAPhotos: CollectionConfig = {
   slug: 'sda-photos',
@@ -43,6 +44,30 @@ export const SDAPhotos: CollectionConfig = {
           // Non-fatal — leave siteName as-is; admins can edit it manually.
         }
         return data
+      },
+    ],
+    // Flush the ISR cache for /api/sda-vacancies and every page that
+    // fetches it (find-a-home listing + detail). Without this, edits
+    // wait up to `revalidate` seconds (currently 30) before showing.
+    afterChange: [
+      () => {
+        try {
+          revalidateTag('sda-vacancies')
+          revalidatePath('/api/sda-vacancies')
+        } catch {
+          // revalidateTag only works inside a Next.js request context;
+          // ignore failures from CLI scripts / seed contexts.
+        }
+      },
+    ],
+    afterDelete: [
+      () => {
+        try {
+          revalidateTag('sda-vacancies')
+          revalidatePath('/api/sda-vacancies')
+        } catch {
+          // see afterChange
+        }
       },
     ],
   },

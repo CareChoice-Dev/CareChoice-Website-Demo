@@ -4,7 +4,10 @@ import { mapSiteRecord, type SiteRecord, type SDAPhotoRef } from './mapper'
 import { getPayloadClient } from '@/lib/payload-client'
 import fallback from '@/lib/sda-vacancies-fallback.json'
 
-export const revalidate = 600
+// 30s instead of 10 min so newly-uploaded SDA photos appear quickly
+// without needing a redeploy. Tag-based revalidation from the
+// SDAPhotos afterChange hook flushes this on edits too.
+export const revalidate = 30
 
 const SOQL = `
   SELECT Id, Name,
