@@ -42,10 +42,10 @@ export default async function SDADetail({
 
   // TEMP DEBUG — exposes what the lambda actually sees for photos.
   // Remove once photo-render issue is diagnosed.
-  console.log('[DEBUG-PHOTOS]', { slug, photoCount: home.photos.length, photoUrls: home.photos.map((p) => p.url) })
+  const __debugPhotos = `slug=${slug} photoCount=${home.photos.length} urls=${home.photos.map((p) => p.url.slice(-30)).join('|')}`
 
   return (
-    <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-10">
+    <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-10" data-debug-photos={__debugPhotos}>
       <nav aria-label="Breadcrumb" className="text-sm">
         <a href={`${hrefPrefix}/`}>Home</a> · <a href={`${hrefPrefix}/find-a-home`}>Find a home</a> · {home.name}
       </nav>
