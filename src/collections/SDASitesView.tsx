@@ -251,7 +251,7 @@ function CountBadge({ count }: { count: number }) {
 
 function SiteCard({ entry }: { entry: SiteEntry }) {
   const { site, count, hero } = entry
-  const heroUrl = hero?.url ?? null
+  const heroUrl = hero?.sizes?.thumbnail?.url ?? hero?.url ?? null
   const heroAlt = hero?.alt ?? site.name
   const addressText = site.address?.formatted?.trim()
 

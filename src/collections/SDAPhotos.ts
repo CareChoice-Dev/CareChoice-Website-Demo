@@ -5,7 +5,7 @@ export const SDAPhotos: CollectionConfig = {
   slug: 'sda-photos',
   admin: {
     useAsTitle: 'siteName',
-    defaultColumns: ['siteName', 'updatedAt'],
+    defaultColumns: ['siteName', 'isHero', 'displayOrder', 'updatedAt'],
     group: 'SDA',
     // NOTE: Custom Sites Roster list view temporarily unhooked while we debug
     // a runtime admin crash. The component file lives at
@@ -52,6 +52,9 @@ export const SDAPhotos: CollectionConfig = {
     afterChange: [
       () => {
         try {
+          // revalidatePath invalidates the route segment cache AND any
+          // fetch caches on the path. Hit the API and both find-a-home
+          // routes so cards + detail pages flush.
           revalidatePath('/api/sda-vacancies', 'page')
           revalidatePath('/[locale]/find-a-home', 'page')
           revalidatePath('/[locale]/find-a-home/[slug]', 'page')
@@ -64,6 +67,9 @@ export const SDAPhotos: CollectionConfig = {
     afterDelete: [
       () => {
         try {
+          // revalidatePath invalidates the route segment cache AND any
+          // fetch caches on the path. Hit the API and both find-a-home
+          // routes so cards + detail pages flush.
           revalidatePath('/api/sda-vacancies', 'page')
           revalidatePath('/[locale]/find-a-home', 'page')
           revalidatePath('/[locale]/find-a-home/[slug]', 'page')
@@ -79,10 +85,9 @@ export const SDAPhotos: CollectionConfig = {
       label: 'Salesforce Site',
       type: 'text',
       required: true,
-      unique: true,
       admin: {
         description:
-          'Pick a site from Salesforce. The ID is stored; the name is denormalised for display. One SDAPhotos doc per site — add multiple photos via the Photos array below.',
+          'Pick a site from Salesforce. The ID is stored; the name is denormalised for display.',
         components: {
           Field: 'src/collections/SDAPhotoSitePickerField#SDAPhotoSitePickerField',
         },
@@ -98,42 +103,34 @@ export const SDAPhotos: CollectionConfig = {
       },
     },
     {
-      name: 'photos',
-      label: 'Photos',
-      labels: { singular: 'Photo', plural: 'Photos' },
-      type: 'array',
+      name: 'media',
+      label: 'Photo',
+      type: 'upload',
+      relationTo: 'media',
       required: true,
-      minRows: 1,
       admin: {
         description:
-          'Bulk-upload photos to the Media collection first, then add a row here per photo. Drag rows to reorder; tick "Hero" on one to mark it as the main image.',
+          'Upload the photo to the Media collection. Alt text is required there.',
       },
-      fields: [
-        {
-          name: 'media',
-          label: 'Photo',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
-        },
-        {
-          name: 'isHero',
-          label: 'Hero',
-          type: 'checkbox',
-          defaultValue: false,
-          admin: {
-            description:
-              'Tick on the photo to use as the main hero image. Only the first hero is shown.',
-            width: '50%',
-          },
-        },
-        {
-          name: 'caption',
-          label: 'Caption (optional)',
-          type: 'text',
-          admin: { width: '50%' },
-        },
-      ],
+    },
+    {
+      name: 'isHero',
+      label: 'Use as hero photo',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'Tick to use this as the main hero image for the site. Only the first hero per site is shown.',
+      },
+    },
+    {
+      name: 'displayOrder',
+      label: 'Display order',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        description: 'Lower numbers appear first. Hero photo overrides order.',
+      },
     },
   ],
 }
