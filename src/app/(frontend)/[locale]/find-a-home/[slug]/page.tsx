@@ -14,8 +14,12 @@ async function fetchVacancy(id: string): Promise<SDAVacancy | null> {
   const h = await headers()
   const proto = h.get('x-forwarded-proto') ?? 'http'
   const host = h.get('host') ?? 'localhost:3000'
+  // No-store: Next.js's `revalidate` fetch cache wasn't busting reliably
+  // after SDAPhotos edits, leaving newly-added photos hidden until a redeploy.
+  // The vacancies payload is small (<50 records) so the lambda perf hit is
+  // negligible for the demo.
   const res = await fetch(`${proto}://${host}/api/sda-vacancies`, {
-    next: { revalidate: 30, tags: ['sda-vacancies'] },
+    cache: 'no-store',
   })
   if (!res.ok) return null
   const data: { vacancies: SDAVacancy[] } = await res.json()

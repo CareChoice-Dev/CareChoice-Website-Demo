@@ -13,8 +13,9 @@ async function fetchAllVacancies(): Promise<{
   const h = await headers()
   const proto = h.get('x-forwarded-proto') ?? 'http'
   const host = h.get('host') ?? 'localhost:3000'
+  // See [slug]/page.tsx for rationale on no-store.
   const res = await fetch(`${proto}://${host}/api/sda-vacancies`, {
-    next: { revalidate: 30, tags: ['sda-vacancies'] },
+    cache: 'no-store',
   })
   if (!res.ok) {
     return { vacancies: [], source: 'error' }
