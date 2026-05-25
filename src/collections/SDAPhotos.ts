@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 
 export const SDAPhotos: CollectionConfig = {
   slug: 'sda-photos',
@@ -52,10 +52,14 @@ export const SDAPhotos: CollectionConfig = {
     afterChange: [
       () => {
         try {
-          revalidateTag('sda-vacancies')
-          revalidatePath('/api/sda-vacancies')
+          // revalidatePath invalidates the route segment cache AND any
+          // fetch caches on the path. Hit the API and both find-a-home
+          // routes so cards + detail pages flush.
+          revalidatePath('/api/sda-vacancies', 'page')
+          revalidatePath('/[locale]/find-a-home', 'page')
+          revalidatePath('/[locale]/find-a-home/[slug]', 'page')
         } catch {
-          // revalidateTag only works inside a Next.js request context;
+          // revalidate* only works inside a Next.js request context;
           // ignore failures from CLI scripts / seed contexts.
         }
       },
@@ -63,8 +67,12 @@ export const SDAPhotos: CollectionConfig = {
     afterDelete: [
       () => {
         try {
-          revalidateTag('sda-vacancies')
-          revalidatePath('/api/sda-vacancies')
+          // revalidatePath invalidates the route segment cache AND any
+          // fetch caches on the path. Hit the API and both find-a-home
+          // routes so cards + detail pages flush.
+          revalidatePath('/api/sda-vacancies', 'page')
+          revalidatePath('/[locale]/find-a-home', 'page')
+          revalidatePath('/[locale]/find-a-home/[slug]', 'page')
         } catch {
           // see afterChange
         }
