@@ -31,7 +31,7 @@ export function LocaleSwitcher({ current }: { current: UrlLocaleSlug }) {
             type="button"
             aria-pressed={active}
             onClick={() => switchTo(slug)}
-            className={`px-3 py-1 text-[13px] font-semibold uppercase tracking-wider border-2 border-black -ml-[2px] first:ml-0 ${
+            className={`h-[28px] px-2.5 text-[11px] font-semibold uppercase tracking-wider border-2 border-black -ml-[2px] first:ml-0 ${
               active ? 'bg-cc-magenta text-white' : 'bg-white text-black hover:bg-cc-surface-pink'
             }`}
           >

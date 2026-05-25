@@ -103,12 +103,12 @@ export function AskCCTrigger({ variant, className }: AskCCTriggerProps) {
       type="button"
       onClick={openPanel}
       aria-label="Open Ask CareChoice"
-      className={`inline-flex items-center gap-2 px-2 py-1 border-2 border-cc-black bg-cc-white text-cc-black font-semibold text-sm hover:bg-cc-surface-pink transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-cc-magenta focus-visible:outline-offset-2 ${className ?? ''}`}
+      className={`inline-flex items-center gap-1.5 h-[28px] px-2 border-2 border-cc-black bg-cc-white text-cc-black font-semibold text-xs hover:bg-cc-surface-pink transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-cc-magenta focus-visible:outline-offset-2 ${className ?? ''}`}
     >
       <svg
         aria-hidden
-        width="16"
-        height="16"
+        width="14"
+        height="14"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"

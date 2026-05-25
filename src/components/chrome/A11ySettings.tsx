@@ -23,7 +23,7 @@ export function A11ySettings() {
   } = useA11yStore()
 
   return (
-    <div className="flex flex-wrap items-center gap-2 text-sm" role="group" aria-label="Accessibility settings">
+    <div className="flex flex-wrap items-center gap-1.5 text-xs" role="group" aria-label="Accessibility settings">
       <div className="flex gap-0" role="group" aria-label="Text size">
         {SIZES.map((s) => {
           const active = textSize === s.key
@@ -34,7 +34,7 @@ export function A11ySettings() {
               aria-pressed={active}
               aria-label={s.aria}
               onClick={() => setTextSize(s.key)}
-              className={`min-w-[36px] h-[36px] px-2 border-2 border-cc-black -ml-[2px] first:ml-0 font-semibold ${
+              className={`min-w-[28px] h-[28px] px-1.5 border-2 border-cc-black -ml-[2px] first:ml-0 font-semibold text-xs ${
                 active ? 'bg-cc-magenta text-white' : 'bg-white text-cc-black hover:bg-cc-surface-pink'
               }`}
             >
@@ -44,13 +44,13 @@ export function A11ySettings() {
         })}
       </div>
 
-      <label htmlFor={contrastId} className="flex items-center gap-1 ml-2">
+      <label htmlFor={contrastId} className="flex items-center ml-1">
         <span className="sr-only">Contrast</span>
         <select
           id={contrastId}
           value={contrast}
           onChange={(e) => setContrast(e.target.value as 'auto' | 'high')}
-          className="border-2 border-cc-black px-2 h-[36px] bg-cc-white font-semibold text-sm"
+          className="border-2 border-cc-black px-1.5 h-[28px] bg-cc-white font-semibold text-xs"
         >
           <option value="auto">Contrast: auto</option>
           <option value="high">Contrast: high</option>
@@ -61,7 +61,7 @@ export function A11ySettings() {
         type="button"
         aria-pressed={dyslexiaFont}
         onClick={toggleDyslexiaFont}
-        className={`h-[36px] px-3 border-2 border-cc-black font-semibold ${
+        className={`h-[28px] px-2.5 border-2 border-cc-black font-semibold text-xs ${
           dyslexiaFont ? 'bg-cc-magenta text-white' : 'bg-white text-cc-black hover:bg-cc-surface-pink'
         }`}
       >
@@ -72,7 +72,7 @@ export function A11ySettings() {
         type="button"
         aria-pressed={reduceMotion}
         onClick={toggleReduceMotion}
-        className={`h-[36px] px-3 border-2 border-cc-black font-semibold ${
+        className={`h-[28px] px-2.5 border-2 border-cc-black font-semibold text-xs ${
           reduceMotion ? 'bg-cc-magenta text-white' : 'bg-white text-cc-black hover:bg-cc-surface-pink'
         }`}
       >

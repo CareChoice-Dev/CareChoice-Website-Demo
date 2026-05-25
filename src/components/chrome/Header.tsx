@@ -40,54 +40,54 @@ export async function Header({ locale }: { locale: PayloadLocale }) {
 
   return (
     <header className="relative border-b-2 border-cc-black bg-cc-white">
-      <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-4 flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-6">
-          <Link href="/" className="flex items-center no-underline" aria-label="CareChoice home">
-            <Image
-              src="/brand/logo-stacked-tagline.png"
-              alt="CareChoice. Taking care further."
-              width={200}
-              height={130}
-              className="h-16 w-auto"
-              priority
-            />
-          </Link>
-
-          <nav aria-label="Primary" className="hidden md:flex items-center gap-6">
-            {links.map((item) => {
-              const hasChildren = Array.isArray(item.children) && item.children.length > 0
-              if (hasChildren) {
-                return (
-                  <ServicesDropdown
-                    key={`${item.url}-${item.label}`}
-                    label={item.label}
-                    parentUrl={item.url}
-                    hrefPrefix={hrefPrefix}
-                    items={item.children!}
-                  />
-                )
-              }
-              return (
-                <Link key={item.url} href={item.url} className="font-semibold no-underline hover:underline">
-                  {item.label}
-                </Link>
-              )
-            })}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            {ctas.map((cta) => (
-              <Button key={cta.url} href={cta.url} size="md" className="hidden md:inline-flex">
-                {cta.label} ▸
-              </Button>
-            ))}
-            <MobileNav items={topNav} hrefPrefix={hrefPrefix} />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-end gap-3">
+      <div className="border-b border-cc-black/15 bg-cc-surface-pink/40">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-2 flex items-center justify-end gap-3">
           <AskCCTrigger variant="header-icon" />
           <AccessibilityToolbar currentLocale={currentSlug} />
+        </div>
+      </div>
+
+      <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-4 flex items-center justify-between gap-6">
+        <Link href="/" className="flex items-center no-underline" aria-label="CareChoice home">
+          <Image
+            src="/brand/logo-stacked-tagline.png"
+            alt="CareChoice. Taking care further."
+            width={200}
+            height={130}
+            className="h-16 w-auto"
+            priority
+          />
+        </Link>
+
+        <nav aria-label="Primary" className="hidden md:flex items-center gap-6">
+          {links.map((item) => {
+            const hasChildren = Array.isArray(item.children) && item.children.length > 0
+            if (hasChildren) {
+              return (
+                <ServicesDropdown
+                  key={`${item.url}-${item.label}`}
+                  label={item.label}
+                  parentUrl={item.url}
+                  hrefPrefix={hrefPrefix}
+                  items={item.children!}
+                />
+              )
+            }
+            return (
+              <Link key={item.url} href={item.url} className="font-semibold no-underline hover:underline">
+                {item.label}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className="flex items-center gap-3">
+          {ctas.map((cta) => (
+            <Button key={cta.url} href={cta.url} size="md" className="hidden md:inline-flex">
+              {cta.label} ▸
+            </Button>
+          ))}
+          <MobileNav items={topNav} hrefPrefix={hrefPrefix} />
         </div>
       </div>
     </header>

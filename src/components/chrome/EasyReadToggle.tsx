@@ -18,7 +18,7 @@ export function EasyReadToggle() {
       type="button"
       aria-pressed={isActive}
       onClick={onClick}
-      className={`h-[36px] px-3 border-2 border-cc-black font-semibold ${
+      className={`h-[28px] px-2.5 border-2 border-cc-black font-semibold text-xs ${
         isActive ? 'bg-cc-magenta text-white' : 'bg-white text-cc-black hover:bg-cc-surface-pink'
       }`}
     >
