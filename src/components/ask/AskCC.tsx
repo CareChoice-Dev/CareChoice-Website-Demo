@@ -103,6 +103,31 @@ export function AskCC() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, closePanel])
 
+  // Click anywhere outside the panel (or its triggers) closes — Salesforce style.
+  // Defer subscribing one tick after open so the opening click doesn't immediately
+  // close again.
+  useEffect(() => {
+    if (!open) return
+    let armed = false
+    const arm = setTimeout(() => {
+      armed = true
+    }, 0)
+    const onPointerDown = (e: PointerEvent) => {
+      if (!armed) return
+      const panel = panelRef.current
+      const target = e.target as HTMLElement | null
+      if (!panel || !target) return
+      if (panel.contains(target)) return
+      if (target.closest('[data-askcc-trigger]')) return
+      closePanel()
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => {
+      clearTimeout(arm)
+      document.removeEventListener('pointerdown', onPointerDown)
+    }
+  }, [open, closePanel])
+
   const handleSubmit = useCallback(
     async (e?: React.FormEvent<HTMLFormElement>) => {
       if (e) e.preventDefault()
@@ -155,6 +180,10 @@ export function AskCC() {
           </div>
           <button
             type="button"
+            onPointerDown={(e) => {
+              e.preventDefault()
+              closePanel()
+            }}
             onClick={closePanel}
             aria-label="Close Ask CareChoice"
             className="text-white text-2xl leading-none px-2 py-1 hover:bg-cc-black/20 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"

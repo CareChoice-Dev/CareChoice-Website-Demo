@@ -44,7 +44,7 @@ export function AskCCTrigger({ variant, className }: AskCCTriggerProps) {
       await submit(chip)
     }
     return (
-      <div className={`flex flex-col gap-3 ${className ?? ''}`}>
+      <div data-askcc-trigger className={`flex flex-col gap-3 ${className ?? ''}`}>
         <form onSubmit={handleHeroSubmit} className="flex flex-col sm:flex-row gap-0 border-4 border-cc-black bg-cc-white shadow-hard-card">
           <label className="sr-only" htmlFor="askcc-hero-input">
             Ask CareChoice anything
@@ -88,6 +88,7 @@ export function AskCCTrigger({ variant, className }: AskCCTriggerProps) {
     return (
       <button
         type="button"
+        data-askcc-trigger
         onClick={openPanel}
         aria-label="Open Ask CareChoice"
         className={`fixed bottom-6 right-6 z-40 bg-cc-magenta text-white font-bold border-2 border-cc-black px-5 py-3 rounded-none shadow-hard-card hover:-translate-x-[2px] hover:-translate-y-[2px] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-cc-black focus-visible:outline-offset-2 ${className ?? ''}`}
@@ -101,6 +102,7 @@ export function AskCCTrigger({ variant, className }: AskCCTriggerProps) {
   return (
     <button
       type="button"
+      data-askcc-trigger
       onClick={openPanel}
       aria-label="Open Ask CareChoice"
       className={`inline-flex items-center gap-1.5 h-[28px] px-2 border-2 border-cc-black bg-cc-white text-cc-black font-semibold text-xs hover:bg-cc-surface-pink transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-cc-magenta focus-visible:outline-offset-2 ${className ?? ''}`}
