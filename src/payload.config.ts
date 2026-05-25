@@ -24,6 +24,20 @@ import { EmergencyBanner } from './globals/EmergencyBanner'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// When a Vercel project has multiple Blob stores connected, the second
+// store's token is exposed under a prefixed env var (e.g. the public
+// `care-choice-website-demo-blob` store with prefix `Blob_Pub` lands at
+// `BLOB_PUB_BLOB_READ_WRITE_TOKEN`). Promote it to the canonical
+// `BLOB_READ_WRITE_TOKEN` at module load so every downstream call —
+// the storage plugin, @vercel/blob library helpers, our custom server
+// route — keeps reading from one place.
+//
+// Safe to remove once the old private store's env var is deleted in
+// the Vercel dashboard and the public store's prefix is cleared.
+if (process.env.BLOB_PUB_BLOB_READ_WRITE_TOKEN) {
+  process.env.BLOB_READ_WRITE_TOKEN = process.env.BLOB_PUB_BLOB_READ_WRITE_TOKEN
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
