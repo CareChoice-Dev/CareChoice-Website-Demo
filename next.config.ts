@@ -27,6 +27,14 @@ const nextConfig: NextConfig = {
         hostname: 'carechoice1.sharepoint.com',
         pathname: '/**',
       },
+      // Vercel Blob — Payload Media uploads land at
+      // `<storeId>.public.blob.vercel-storage.com`. Wildcard covers
+      // store rotations without needing a config bump each time.
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+        pathname: '/**',
+      },
     ],
   },
   webpack: (webpackConfig) => {
