@@ -46,18 +46,23 @@ export const SDAPhotos: CollectionConfig = {
         return data
       },
     ],
-    // Flush the ISR cache for /api/sda-vacancies and every page that
-    // fetches it (find-a-home listing + detail). Without this, edits
-    // wait up to `revalidate` seconds (currently 30) before showing.
+    // Flush the ISR + fetch caches for the affected pages. The pages
+    // fetch /api/sda-vacancies and the Data Cache keyed by URL must be
+    // invalidated explicitly — revalidatePath on the API route does NOT
+    // invalidate fetch caches keyed by that URL elsewhere. Bracketed
+    // patterns like `/[locale]/find-a-home/[slug]` are unreliable here,
+    // so iterate every locale + use the literal siteId.
     afterChange: [
-      () => {
+      ({ doc }) => {
         try {
-          // revalidatePath invalidates the route segment cache AND any
-          // fetch caches on the path. Hit the API and both find-a-home
-          // routes so cards + detail pages flush.
           revalidatePath('/api/sda-vacancies', 'page')
-          revalidatePath('/[locale]/find-a-home', 'page')
-          revalidatePath('/[locale]/find-a-home/[slug]', 'page')
+          for (const locale of ['en', 'vi', 'zh', 'easy-read']) {
+            revalidatePath(`/${locale}/find-a-home`, 'page')
+            const siteId = (doc as { siteId?: string })?.siteId
+            if (siteId) {
+              revalidatePath(`/${locale}/find-a-home/${siteId}`, 'page')
+            }
+          }
         } catch {
           // revalidate* only works inside a Next.js request context;
           // ignore failures from CLI scripts / seed contexts.
@@ -65,14 +70,16 @@ export const SDAPhotos: CollectionConfig = {
       },
     ],
     afterDelete: [
-      () => {
+      ({ doc }) => {
         try {
-          // revalidatePath invalidates the route segment cache AND any
-          // fetch caches on the path. Hit the API and both find-a-home
-          // routes so cards + detail pages flush.
           revalidatePath('/api/sda-vacancies', 'page')
-          revalidatePath('/[locale]/find-a-home', 'page')
-          revalidatePath('/[locale]/find-a-home/[slug]', 'page')
+          for (const locale of ['en', 'vi', 'zh', 'easy-read']) {
+            revalidatePath(`/${locale}/find-a-home`, 'page')
+            const siteId = (doc as { siteId?: string })?.siteId
+            if (siteId) {
+              revalidatePath(`/${locale}/find-a-home/${siteId}`, 'page')
+            }
+          }
         } catch {
           // see afterChange
         }
