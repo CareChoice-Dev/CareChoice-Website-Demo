@@ -30,6 +30,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      providers: ['/components/admin/MediaUploadOverride#MediaUploadOverride'],
+    },
   },
   collections: [Users, Media, Pages, Services, CaseStudies, News, StaffProfiles, AudiencePathways, JobListings, SDAPhotos],
   globals: [Navigation, SiteSettings, SDAHomesPage, EmergencyBanner],
