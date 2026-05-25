@@ -4,10 +4,11 @@ import { mapSiteRecord, type SiteRecord, type SDAPhotoRef } from './mapper'
 import { getPayloadClient } from '@/lib/payload-client'
 import fallback from '@/lib/sda-vacancies-fallback.json'
 
-// 30s instead of 10 min so newly-uploaded SDA photos appear quickly
-// without needing a redeploy. Tag-based revalidation from the
-// SDAPhotos afterChange hook flushes this on edits too.
-export const revalidate = 30
+// Always fresh — Next.js's revalidate/tag caching wasn't busting
+// reliably after admin SDAPhotos edits, leaving stale photo arrays
+// for hours. The vacancies payload is <50 records of Salesforce SDA
+// data, so always-fresh has negligible lambda perf cost for the demo.
+export const dynamic = 'force-dynamic'
 
 const SOQL = `
   SELECT Id, Name,
