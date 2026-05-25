@@ -40,6 +40,10 @@ export default async function SDADetail({
   const home = await fetchVacancy(slug)
   if (!home) notFound()
 
+  // TEMP DEBUG — exposes what the lambda actually sees for photos.
+  // Remove once photo-render issue is diagnosed.
+  console.log('[DEBUG-PHOTOS]', { slug, photoCount: home.photos.length, photoUrls: home.photos.map((p) => p.url) })
+
   return (
     <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-10">
       <nav aria-label="Breadcrumb" className="text-sm">
