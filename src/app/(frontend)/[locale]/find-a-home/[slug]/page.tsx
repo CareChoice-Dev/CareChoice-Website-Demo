@@ -14,6 +14,7 @@ import { AccessibilityFeaturesGrid } from '@/components/sda/AccessibilityFeature
 import { SDAQuickFactsCard } from '@/components/sda/SDAQuickFactsCard'
 import { SuburbContextBlock } from '@/components/sda/SuburbContextBlock'
 import { SimilarHomesRow } from '@/components/sda/SimilarHomesRow'
+import { SDAHomeJsonLd } from '@/components/seo/SDAHomeJsonLd'
 
 async function fetchVacancy(id: string): Promise<SDAVacancy | null> {
   const h = await headers()
@@ -42,6 +43,7 @@ export default async function SDADetail({
 
   return (
     <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-10">
+      <SDAHomeJsonLd home={home} urlPrefix={hrefPrefix} />
       <nav aria-label="Breadcrumb" className="text-sm">
         <a href={`${hrefPrefix}/`}>Home</a> · <a href={`${hrefPrefix}/find-a-home`}>Find a home</a> · {home.name}
       </nav>

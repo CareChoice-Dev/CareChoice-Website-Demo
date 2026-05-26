@@ -5,6 +5,7 @@ import { ContactStrip } from './ContactStrip'
 import { NewsletterSignup } from './NewsletterSignup'
 import { TrustMarks } from './TrustMarks'
 import { InclusionFlags } from './InclusionFlags'
+import { ManageCookiesButton } from './ManageCookiesButton'
 import type { PayloadLocale } from '@/lib/locale'
 
 interface FooterColumn {
@@ -63,6 +64,8 @@ export async function Footer({ locale }: { locale: PayloadLocale }) {
         <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs border-t-2 border-cc-black pt-4">
           <Link href="/privacy">Privacy.</Link>
           <Link href="/accessibility">Accessibility statement.</Link>
+          <Link href="/complaints">Complaints &amp; feedback.</Link>
+          <ManageCookiesButton />
           {ndisProviderNumber ? (
             <span>NDIS provider — {ndisProviderNumber}.</span>
           ) : (

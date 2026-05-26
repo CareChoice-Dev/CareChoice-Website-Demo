@@ -9,6 +9,7 @@ import { SkipToMain } from '@/components/chrome/SkipToMain'
 import { AgentforceEmbed } from '@/components/chrome/AgentforceEmbed'
 import { A11yApplyClient } from '@/components/chrome/A11yApplyClient'
 import { OrganizationJsonLd } from '@/components/seo/OrganizationJsonLd'
+import { CookieConsent } from '@/components/chrome/CookieConsent'
 
 const sourceSans3 = localFont({
   src: [
@@ -66,6 +67,7 @@ export default async function LocaleLayout({
         <main id="main">{children}</main>
         <Footer locale={payloadLocale} />
         <AgentforceEmbed />
+        <CookieConsent />
       </body>
     </html>
   )

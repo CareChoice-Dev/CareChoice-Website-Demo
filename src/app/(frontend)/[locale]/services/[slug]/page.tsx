@@ -8,6 +8,7 @@ import { AccordionBlock } from '@/components/blocks/AccordionBlock'
 import { CTABlock } from '@/components/blocks/CTABlock'
 import { RichText } from '@/components/primitives/RichText'
 import { EasyReadNotice } from '@/components/primitives/EasyReadNotice'
+import { ServiceJsonLd } from '@/components/seo/ServiceJsonLd'
 
 interface BulletPoint {
   point: string
@@ -84,6 +85,13 @@ export default async function ServiceDetail({
 
   return (
     <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-12">
+      <ServiceJsonLd
+        title={service.title as string}
+        description={(service.intro as string | undefined) ?? undefined}
+        url={`${hrefPrefix}/services/${slug}`}
+        serviceType={eyebrow || undefined}
+        faq={faq}
+      />
       <nav aria-label="Breadcrumb" className="text-sm">
         <a href={`${hrefPrefix}/`}>Home</a> ·{' '}
         <a href={`${hrefPrefix}/services`}>Our services</a> · {service.title as string}
