@@ -1,7 +1,13 @@
 import { notFound } from 'next/navigation'
+import Image from 'next/image'
 import { isUrlSlug, urlSlugToLocale } from '@/lib/locale'
 import { findOneNewsBySlug, getPayloadClient } from '@/lib/payload-client'
 import { RichText } from '@/components/primitives/RichText'
+
+interface PopulatedMedia {
+  url?: string | null
+  alt?: string | null
+}
 
 export async function generateStaticParams() {
   const payload = await getPayloadClient()
@@ -40,6 +46,11 @@ export default async function NewsArticle({
       })
     : null
 
+  const hero =
+    article.heroImage && typeof article.heroImage === 'object'
+      ? (article.heroImage as PopulatedMedia)
+      : null
+
   return (
     <article className="max-w-[800px] mx-auto px-6 md:px-8 py-10 flex flex-col gap-6">
       <header className="flex flex-col gap-2">
@@ -51,6 +62,19 @@ export default async function NewsArticle({
           <p className="text-sm text-cc-fg-muted">By {article.author as string}</p>
         )}
       </header>
+
+      {hero?.url && (
+        <div className="relative aspect-[16/9] border-2 border-cc-black shadow-hard-card overflow-hidden">
+          <Image
+            src={hero.url}
+            alt={hero.alt ?? (article.title as string)}
+            fill
+            sizes="(min-width: 1024px) 800px, 100vw"
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
 
       {article.excerpt && (
         <p className="text-lg leading-relaxed">{article.excerpt as string}</p>

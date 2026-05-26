@@ -12,6 +12,11 @@ interface OutcomeMetricField {
   value: string
 }
 
+interface PopulatedMedia {
+  url?: string | null
+  alt?: string | null
+}
+
 export async function generateStaticParams() {
   const payload = await getPayloadClient()
   const result = await payload.find({
@@ -46,6 +51,11 @@ export default async function CaseStudyDetail({
     ? (story.outcomeMetrics as OutcomeMetricField[])
     : []
 
+  const hero =
+    story.heroImage && typeof story.heroImage === 'object'
+      ? (story.heroImage as PopulatedMedia)
+      : null
+
   return (
     <article className="flex flex-col gap-0">
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 pt-6 w-full">
@@ -58,6 +68,8 @@ export default async function CaseStudyDetail({
         <CaseStudyHero
           title={story.title as string}
           participantName={(story.participantName as string) ?? undefined}
+          imageUrl={hero?.url ?? null}
+          imageAlt={hero?.alt ?? undefined}
         />
       </div>
 
