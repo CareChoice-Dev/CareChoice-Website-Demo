@@ -9,6 +9,16 @@
   .shadow-hard-btn  { box-shadow: var(--cc-shadow-btn-hover); }
 }
 
+/* WCAG 2.2 SC 2.4.13 Focus Appearance — safety-net focus ring for any
+   interactive element that doesn't define its own. Components with explicit
+   `focus-visible:outline-*` utilities override this. */
+@layer base {
+  :focus-visible {
+    outline: 3px solid var(--cc-magenta);
+    outline-offset: 2px;
+  }
+}
+
 /* Ask CareChoice panel pushes desktop content instead of overlaying it
    (mobile keeps the full-width modal pattern). */
 body {

@@ -100,7 +100,7 @@ export function SearchUI() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search the site…"
-          className="w-full border-4 border-cc-black px-4 py-3 text-lg bg-cc-white focus:outline-none focus:border-cc-magenta"
+          className="w-full border-4 border-cc-black px-4 py-3 text-lg bg-cc-white focus:outline-none focus-visible:outline-2 focus-visible:outline-cc-magenta focus-visible:outline-offset-2 focus:border-cc-magenta"
         />
       </label>
 

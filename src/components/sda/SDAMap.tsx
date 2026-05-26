@@ -34,8 +34,23 @@ export function SDAMap({
   }, [points])
 
   return (
-    <div className="h-[560px] border-[7px] border-cc-black">
-      <MapContainer center={center} zoom={9} scrollWheelZoom className="h-full w-full">
+    <div
+      className="h-[560px] border-[7px] border-cc-black"
+      role="region"
+      aria-label="Map of available CareChoice homes. Use the plus and minus buttons to zoom and arrow keys to pan; the list view above shows the same homes without a map."
+    >
+      {/* zoomControl (the +/- buttons) and keyboard (arrow-key pan) are Leaflet
+          defaults — they provide the single-pointer / no-drag alternatives
+          required by WCAG 2.2 SC 2.5.7. The grid/map toggle is a further
+          non-map path to the same listings. */}
+      <MapContainer
+        center={center}
+        zoom={9}
+        scrollWheelZoom
+        zoomControl
+        keyboard
+        className="h-full w-full"
+      >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

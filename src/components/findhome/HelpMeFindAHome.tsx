@@ -72,7 +72,7 @@ export function HelpMeFindAHome({ hrefPrefix = '' }: { hrefPrefix?: string }) {
             id={regionId}
             value={region}
             onChange={(e) => setRegion(e.target.value)}
-            className="w-full max-w-md border-2 border-cc-black px-3 py-2 rounded-none bg-cc-white focus:outline-none focus:ring-0 focus:border-cc-magenta"
+            className="w-full max-w-md border-2 border-cc-black px-3 py-2 rounded-none bg-cc-white focus:outline-none focus-visible:outline-2 focus-visible:outline-cc-magenta focus-visible:outline-offset-2 focus:border-cc-magenta"
           >
             <option value="">Any region.</option>
             {VIC_REGIONS.map((r) => (

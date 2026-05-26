@@ -55,7 +55,7 @@ export function AskCCTrigger({ variant, className }: AskCCTriggerProps) {
             onChange={(e) => setHeroInput(e.target.value)}
             onFocus={() => openPanel()}
             placeholder="Ask CareChoice anything — services, homes, or how to enquire."
-            className="flex-1 px-4 py-4 text-base sm:text-lg border-0 sm:border-r-2 border-b-2 sm:border-b-0 border-cc-black focus:outline-none focus:bg-cc-surface-pink/30"
+            className="flex-1 px-4 py-4 text-base sm:text-lg border-0 sm:border-r-2 border-b-2 sm:border-b-0 border-cc-black focus:outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-cc-magenta focus:bg-cc-surface-pink/30"
             aria-label="Ask CareChoice anything"
           />
           <button

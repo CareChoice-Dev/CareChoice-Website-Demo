@@ -8,6 +8,7 @@ import { Footer } from '@/components/chrome/Footer'
 import { SkipToMain } from '@/components/chrome/SkipToMain'
 import { AgentforceEmbed } from '@/components/chrome/AgentforceEmbed'
 import { A11yApplyClient } from '@/components/chrome/A11yApplyClient'
+import { OrganizationJsonLd } from '@/components/seo/OrganizationJsonLd'
 
 const sourceSans3 = localFont({
   src: [
@@ -58,6 +59,7 @@ export default async function LocaleLayout({
       className={`${sourceSans3.variable} ${jetbrainsMono.variable}`}
     >
       <body>
+        <OrganizationJsonLd />
         <SkipToMain />
         <A11yApplyClient />
         <Header locale={payloadLocale} />

@@ -14,7 +14,7 @@ interface Props {
 }
 
 const inputClass =
-  'w-full border-2 border-cc-black px-3 py-2 rounded-none bg-cc-white focus:outline-none focus:ring-0 focus:border-cc-magenta'
+  'w-full border-2 border-cc-black px-3 py-2 rounded-none bg-cc-white focus:outline-none focus-visible:outline-2 focus-visible:outline-cc-magenta focus-visible:outline-offset-2 focus:border-cc-magenta'
 
 const labelClass = 'flex flex-col gap-1'
 const labelTextClass = 'font-semibold text-sm'

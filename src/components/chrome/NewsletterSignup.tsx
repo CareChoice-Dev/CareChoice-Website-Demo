@@ -93,7 +93,7 @@ export function NewsletterSignup() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full max-w-md border-2 border-white bg-cc-black text-white px-3 py-2 rounded-none focus:outline-none focus:ring-0 focus:border-cc-magenta placeholder:text-white/50"
+                className="w-full max-w-md border-2 border-white bg-cc-black text-white px-3 py-2 rounded-none focus:outline-none focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2 focus:border-cc-magenta placeholder:text-white/50"
               />
             </label>
 

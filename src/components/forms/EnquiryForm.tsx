@@ -246,6 +246,15 @@ export function EnquiryForm({
             </Button>
           )}
         </div>
+
+        <p className="mt-4 text-xs text-cc-fg-muted">
+          We use the details you provide only to respond to your enquiry and never sell your
+          information. Read our{' '}
+          <a href={privacyPath} className="underline font-semibold">
+            Privacy Statement
+          </a>
+          .
+        </p>
       </Module>
     </div>
   )

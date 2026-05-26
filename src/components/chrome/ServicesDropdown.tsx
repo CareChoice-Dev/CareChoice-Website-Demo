@@ -144,7 +144,7 @@ export function ServicesDropdown({
             <NextLink
               href={buildHref(parentUrl)}
               role="menuitem"
-              className="block px-4 py-3 border-b-2 border-cc-black text-sm font-semibold hover:bg-cc-surface-pink focus:bg-cc-surface-pink focus:outline-none"
+              className="block px-4 py-3 border-b-2 border-cc-black text-sm font-semibold hover:bg-cc-surface-pink focus:bg-cc-surface-pink focus:outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-cc-magenta"
               onClick={() => setOpen(false)}
             >
               View all {label.toLowerCase()} →
@@ -161,7 +161,7 @@ export function ServicesDropdown({
                   role="menuitem"
                   onClick={() => setOpen(false)}
                   onKeyDown={(e) => handleItemKeyDown(e, i)}
-                  className="block px-4 py-3 border-b-2 border-cc-black last:border-b-0 hover:bg-cc-surface-pink focus:bg-cc-surface-pink focus:outline-none"
+                  className="block px-4 py-3 border-b-2 border-cc-black last:border-b-0 hover:bg-cc-surface-pink focus:bg-cc-surface-pink focus:outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-cc-magenta"
                 >
                   <span className="block font-semibold">{child.label}</span>
                   {child.description && (

@@ -238,7 +238,7 @@ export function AskCC() {
             value={pendingInput}
             onChange={(e) => setPendingInput(e.target.value)}
             placeholder="Ask CareChoice anything..."
-            className="flex-1 px-3 py-3 border-r-2 border-cc-black focus:outline-none focus:bg-cc-surface-pink/50"
+            className="flex-1 px-3 py-3 border-r-2 border-cc-black focus:outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-cc-magenta focus:bg-cc-surface-pink/50"
             aria-label="Ask CareChoice anything"
           />
           <button
