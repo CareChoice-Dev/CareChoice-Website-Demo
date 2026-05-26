@@ -29,6 +29,7 @@
     "seed:case-studies": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/seed-case-studies.ts",
     "seed:news": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/seed-news.ts",
     "backfill:hero-images": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/backfill-hero-images.ts",
+    "seed:stock-hero-images": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/seed-stock-hero-images.ts",
     "delete-smoke-test": "cross-env PAYLOAD_DB_PUSH=false NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/delete-smoke-test-content.ts",
     "push-schema": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/push-schema.ts"
   },
