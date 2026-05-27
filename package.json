@@ -20,6 +20,8 @@
     "test": "npm run test:int && npm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
     "test:a11y": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts tests/e2e/a11y.e2e.spec.ts",
+    "test:a11y:prod": "cross-env A11Y_BASE_URL=https://care-choice-website-demo.vercel.app NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts --project=chromium tests/e2e/a11y.e2e.spec.ts",
+    "test:schema:prod": "cross-env A11Y_BASE_URL=https://care-choice-website-demo.vercel.app NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts --project=chromium tests/e2e/structured-data.e2e.spec.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
     "extract": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/extract-content.ts",
     "seed-media": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/scripts/seed-media.ts",

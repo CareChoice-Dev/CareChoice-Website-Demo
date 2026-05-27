@@ -6,6 +6,11 @@ import { defineConfig, devices } from '@playwright/test'
  */
 import 'dotenv/config'
 
+// When A11Y_BASE_URL points at a remote deploy, skip spinning up a local dev
+// server entirely (avoids the Payload schema-push prompt that hangs `next dev`).
+const remoteTarget =
+  !!process.env.A11Y_BASE_URL && !process.env.A11Y_BASE_URL.includes('localhost')
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -41,13 +46,16 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
   ],
-  webServer: {
-    command: 'pnpm dev',
-    reuseExistingServer: true,
-    url: 'http://localhost:3000',
-    // Note: the `pnpm dev` command is currently broken on this machine due to a
-    // pnpmfile/corepack mismatch. `reuseExistingServer: true` means Playwright
-    // skips the spawn when a server is already listening on the URL — start
-    // `npm run dev` manually in another terminal before running these specs.
-  },
+  // For remote targets (A11Y_BASE_URL set to a deploy), no local server needed.
+  webServer: remoteTarget
+    ? undefined
+    : {
+        command: 'pnpm dev',
+        reuseExistingServer: true,
+        url: 'http://localhost:3000',
+        // Note: `pnpm dev` can hang on the Payload schema-push prompt. With
+        // `reuseExistingServer: true` Playwright skips the spawn when a server
+        // is already listening — start `npm run dev` manually first, or target
+        // a deploy with A11Y_BASE_URL to skip the local server altogether.
+      },
 })

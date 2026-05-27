@@ -15,12 +15,25 @@ import AxeBuilder from '@axe-core/playwright'
  * Every other critical/serious axe violation MUST fail this spec.
  */
 
+// Base URL is configurable so the sweep can target a live deploy
+// (A11Y_BASE_URL=https://care-choice-website-demo.vercel.app) instead of a
+// local dev server. The Playwright webServer is skipped for remote targets —
+// see playwright.config.ts.
+const BASE_URL = (process.env.A11Y_BASE_URL ?? 'http://localhost:3000').replace(/\/$/, '')
+
+// A representative SDA home (live Salesforce record) for the detail-page sweep.
+const SAMPLE_SDA_HOME = process.env.A11Y_SDA_HOME_ID ?? 'a1R5g000000Lp4VEAS'
+
 const ROUTES = [
   '/en/',
   '/en/find-a-home',
+  `/en/find-a-home/${SAMPLE_SDA_HOME}`, // detail page — placeholder, gallery, schema
   '/en/services/supported-independent-living',
+  '/en/services/respite', // generic [slug] route — FAQ accordion + Service schema
   '/en/case-studies',
+  '/en/news', // changed — hero grid
   '/en/enquiry',
+  '/en/complaints', // NEW — complaints form (NDIS Practice Standards)
   '/en/search',
   '/en/dev/components',
 ]
@@ -29,7 +42,7 @@ const SUPPRESSED_RULES = ['color-contrast'] // see file header — A11Y-ADAPT, s
 
 for (const route of ROUTES) {
   test(`a11y: ${route} has no critical or serious violations`, async ({ page }) => {
-    await page.goto(`http://localhost:3000${route}`, { waitUntil: 'networkidle' })
+    await page.goto(`${BASE_URL}${route}`, { waitUntil: 'networkidle' })
 
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])

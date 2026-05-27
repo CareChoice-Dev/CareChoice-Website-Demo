@@ -26,6 +26,55 @@
 | Map (find-a-home): keyboard-accessible (Pan with arrows, +/- zoom) | n/a | (fill) | n/a | n/a | n/a | n/a | n/a |
 | Escape closes Chat dialog when open | (fill) | (fill) | (fill) | (fill) | (fill) | (fill) | (fill) |
 
+## Phase 3 — new / changed surfaces (2026-05-27)
+
+Covers surfaces added or changed since the original audit. Assessments below
+are from code review of the keyboard wiring; items marked **(confirm)** should
+be eyeballed with a real keyboard before sign-off.
+
+### Header utility bar (slim top row)
+- Tab order: Ask → A− / A / A+ → Contrast select → Dyslexia font → Reduce
+  motion → Easy Read → EN / VI / ZH / Easy Read, then into the main nav. Matches
+  visual L→R order. **(confirm)**
+- Every control is a native `<button>`/`<select>` — focusable, Enter/Space
+  operable. Focus ring: global `:focus-visible` magenta outline (Phase 1).
+
+### Cookie consent banner (`CookieConsent.tsx`)
+- Renders on first visit (no stored choice). It's a non-modal region at the
+  bottom — it does **not** trap focus, so Tab continues into the page. This is
+  intentional: the banner blocks no content and sets no tracking cookies until
+  a choice is made, so it need not be modal.
+- Accept and Reject are native buttons, keyboard-operable, with the global
+  focus ring. **(confirm both reachable via Tab)**
+- Choice persists in `localStorage`; the footer "Manage cookies" button
+  (`ManageCookiesButton.tsx`) re-opens it. **(confirm re-open works via keyboard)**
+- No auto-dismiss timer (would violate user control); stays until a choice is made.
+
+### Complaints form (`/complaints`, `ComplaintForm.tsx`)
+- All fields use `<label>`-wrapped native inputs/selects/textarea. Required
+  fields use the `required` attribute. Tab order follows visual order. **(confirm)**
+- "Make this complaint anonymously" is a checkbox that conditionally hides the
+  contact fields — focus moves logically; verify the hidden fields are removed
+  from the tab order when anonymous is checked. **(confirm)**
+- Submit error/success is announced via `role="alert"` / `role="status"`.
+- Escalation links (NDIS Quality and Safeguards Commission) are real anchors.
+
+### Ask CareChoice panel — now non-modal (`AskCC.tsx`)
+- Changed from a focus-trapping modal to a non-modal push panel. Expected
+  keyboard behaviour:
+  - Esc closes (handler active only while open).
+  - X button closes on pointer-down + click; closing no longer re-focuses a
+    trigger that would re-open it (the focus-restoration race fixed in d422233).
+  - Tab is **not** trapped — focus can move between the panel and the page,
+    matching the visual "content pushed aside" model.
+  - `aria-modal` intentionally removed (panel is non-modal). **(confirm Tab
+    leaves the panel and returns without reopening)**
+
+### SDA map (find-a-home) — recheck after Phase 1
+- Region now has an `aria-label` describing the no-drag alternatives; Leaflet
+  `zoomControl` (+/−) and `keyboard` pan are explicit. Grid/map toggle remains
+  a full non-map path to the same listings. **(confirm +/− and arrow-pan)**
+
 ## Lighthouse a11y scores (production)
 
 Recorded by running `npm run lh` against production URLs. To run:
