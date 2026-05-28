@@ -11,7 +11,6 @@ import { NewsCardRow } from '@/components/blocks/NewsCardRow'
 import { Link } from '@/components/primitives/Link'
 import { Reveal } from '@/components/primitives/Reveal'
 import { AskCCTrigger } from '@/components/ask/AskCCTrigger'
-import { HeroHomeFinder } from '@/components/findhome/HeroHomeFinder'
 
 const HOW_IT_WORKS = [
   {
@@ -74,10 +73,9 @@ export default async function HomePage({
               </span>
             </p>
           </div>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 bg-cc-surface-pink p-6 md:p-8">
             <p className="eyebrow text-cc-magenta">Ask CareChoice.</p>
             <AskCCTrigger variant="hero" />
-            <HeroHomeFinder hrefPrefix={hrefPrefix} />
           </div>
         </div>
       </div>
