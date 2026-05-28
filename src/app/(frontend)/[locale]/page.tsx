@@ -81,6 +81,20 @@ export default async function HomePage({
             </div>
           </div>
         </div>
+
+        {/* Curved transition into the trust strip below. Two layered solid-colour
+            curves (no gradient — brand spec forbids them): a brighter magenta-60
+            band peeks behind the white wave, giving Salesforce-style layered
+            depth without violating the palette. */}
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 1440 80"
+          preserveAspectRatio="none"
+          className="block w-full h-12 md:h-16"
+        >
+          <path d="M0,80 Q720,-20 1440,80 Z" fill="var(--cc-magenta-60)" />
+          <path d="M0,80 Q720,20 1440,80 Z" fill="#FFFFFF" />
+        </svg>
       </div>
 
       <HeroTrustStrip />
