@@ -5,11 +5,28 @@ import { Section } from '@/components/primitives/Section'
 import { SDAPreviewRow } from '@/components/blocks/SDAPreviewRow'
 import { ServiceCardGrid } from '@/components/blocks/ServiceCardGrid'
 import { CaseStudySpotlight } from '@/components/blocks/CaseStudySpotlight'
-import { StatsRow } from '@/components/blocks/StatsRow'
+import { AnimatedStatsRow } from '@/components/blocks/AnimatedStatsRow'
+import { StepByStepBlock } from '@/components/blocks/StepByStepBlock'
 import { NewsCardRow } from '@/components/blocks/NewsCardRow'
 import { Link } from '@/components/primitives/Link'
+import { Reveal } from '@/components/primitives/Reveal'
 import { AskCCTrigger } from '@/components/ask/AskCCTrigger'
-import { HeroBrandVisual } from '@/components/blocks/HeroBrandVisual'
+import { HeroHomeFinder } from '@/components/findhome/HeroHomeFinder'
+
+const HOW_IT_WORKS = [
+  {
+    title: 'Start a conversation.',
+    body: "Tell us about the person, their goals, and the support they need — online, by phone, or in person. No commitment, no pressure.",
+  },
+  {
+    title: 'We match home, support, and team.',
+    body: 'We look at available SDA homes, the right support model, and a consistent team — not a rotating cast — and walk you through the options.',
+  },
+  {
+    title: 'Move in with support around you.',
+    body: "We plan the move together and stay alongside you afterwards, adjusting support as life changes.",
+  },
+]
 
 export default async function HomePage({
   params,
@@ -60,7 +77,7 @@ export default async function HomePage({
           <div className="flex flex-col gap-3">
             <p className="eyebrow text-cc-magenta">Ask CareChoice.</p>
             <AskCCTrigger variant="hero" />
-            <HeroBrandVisual />
+            <HeroHomeFinder hrefPrefix={hrefPrefix} />
           </div>
         </div>
       </div>
@@ -70,65 +87,83 @@ export default async function HomePage({
       </div>
 
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 w-full">
-        <Section
-          number={1}
-          title="Available now in our homes."
-          rightSlot={
-            <Link href="/find-a-home" className="font-semibold underline">
-              See all homes →
-            </Link>
-          }
-        >
-          <SDAPreviewRow hrefPrefix={hrefPrefix} />
-        </Section>
+        <Reveal>
+          <Section
+            number={1}
+            title="Available now in our homes."
+            rightSlot={
+              <Link href="/find-a-home" className="font-semibold underline">
+                See all homes →
+              </Link>
+            }
+          >
+            <SDAPreviewRow hrefPrefix={hrefPrefix} />
+          </Section>
+        </Reveal>
       </div>
 
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 w-full">
-        <Section
-          number={2}
-          title="Our services."
-          rightSlot={
-            <Link href="/services" className="font-semibold underline">
-              All services →
-            </Link>
-          }
-        >
-          <ServiceCardGrid locale={locale} limit={6} />
-        </Section>
+        <Reveal>
+          <Section number={2} title="How CareChoice works.">
+            <StepByStepBlock steps={HOW_IT_WORKS} />
+          </Section>
+        </Reveal>
       </div>
 
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 w-full">
-        <Section
-          number={3}
-          title="Stories from our community."
-          rightSlot={
-            <Link href="/case-studies" className="font-semibold underline">
-              More stories →
-            </Link>
-          }
-        >
-          <CaseStudySpotlight locale={locale} hrefPrefix={hrefPrefix} />
-        </Section>
+        <Reveal>
+          <Section
+            number={3}
+            title="Our services."
+            rightSlot={
+              <Link href="/services" className="font-semibold underline">
+                All services →
+              </Link>
+            }
+          >
+            <ServiceCardGrid locale={locale} limit={6} />
+          </Section>
+        </Reveal>
       </div>
 
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 w-full">
-        <Section number={4} title="Why CareChoice.">
-          <StatsRow />
-        </Section>
+        <Reveal>
+          <Section
+            number={4}
+            title="Stories from our community."
+            rightSlot={
+              <Link href="/case-studies" className="font-semibold underline">
+                More stories →
+              </Link>
+            }
+          >
+            <CaseStudySpotlight locale={locale} hrefPrefix={hrefPrefix} />
+          </Section>
+        </Reveal>
       </div>
 
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 w-full">
-        <Section
-          number={5}
-          title="In the news."
-          rightSlot={
-            <Link href="/news" className="font-semibold underline">
-              All news →
-            </Link>
-          }
-        >
-          <NewsCardRow locale={locale} limit={3} />
-        </Section>
+        <Reveal>
+          <Section number={5} title="Why CareChoice.">
+            <AnimatedStatsRow />
+          </Section>
+        </Reveal>
+      </div>
+
+      <div className="max-w-[1280px] mx-auto px-6 md:px-8 w-full">
+        <Reveal>
+          <Section
+            number={6}
+            title="In the news."
+            rightSlot={
+              <Link href="/news" className="font-semibold underline">
+                All news →
+              </Link>
+            }
+          >
+            <NewsCardRow locale={locale} limit={3} />
+          </Section>
+        </Reveal>
       </div>
     </div>
   )

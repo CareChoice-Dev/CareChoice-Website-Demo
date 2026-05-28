@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
+import { Suspense } from 'react'
 import { isUrlSlug } from '@/lib/locale'
 import type { SDAVacancy } from '@/components/sda/types'
-import { SDAGridMapToggle } from '@/components/sda/SDAGridMapToggle'
+import { SDAResults } from '@/components/sda/SDAResults'
 import { HelpMeFindAHome } from '@/components/findhome/HelpMeFindAHome'
 import { geocodeAddress } from '@/lib/geocode'
 
@@ -64,7 +65,9 @@ export default async function FindAHome({
 
       <HelpMeFindAHome hrefPrefix={hrefPrefix} />
 
-      <SDAGridMapToggle vacancies={enriched} hrefPrefix={hrefPrefix} />
+      <Suspense fallback={<p className="text-sm text-cc-fg-muted">Loading homes…</p>}>
+        <SDAResults vacancies={enriched} hrefPrefix={hrefPrefix} />
+      </Suspense>
 
       {source !== 'salesforce' && (
         <p className="text-xs text-cc-fg-muted">
