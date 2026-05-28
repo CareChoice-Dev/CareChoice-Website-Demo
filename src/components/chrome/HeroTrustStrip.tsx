@@ -18,9 +18,9 @@ export function HeroTrustStrip() {
   return (
     <section
       aria-labelledby="trust-strip-heading"
-      className="border-y-2 border-cc-black bg-cc-white"
+      className="bg-cc-white border-b border-cc-black/10"
     >
-      <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-4 flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-6">
+      <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-6 flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-8">
         <p id="trust-strip-heading" className="eyebrow shrink-0">
           Registered. Accredited. Trusted.
         </p>
