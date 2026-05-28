@@ -60,21 +60,18 @@ export function HeroBrandVisual() {
       aria-hidden="true"
       className="relative hidden lg:block mt-6 min-h-[340px] select-none"
     >
-      {/* Official CareChoice "C" mark (public/brand/mark-c.svg), inlined so the
-          load-in animation can run. Two layers: a #FF82BE offset shadow behind
-          the #FF008C mark. Floats gently after a scale-in pop. */}
+      {/* CareChoice "C" mark (public/brand/logo-c-art.svg — the dimensional
+          magenta/pink artwork with its green background stripped). Floats
+          gently after a scale-in pop. eslint-disable: a decorative brand SVG
+          served from /public; next/image adds no value over a plain img here. */}
       <div className="cc-logo-float absolute -top-2 right-0 z-0 w-[200px] h-[200px]">
-        <svg viewBox="0 0 96 96" className="cc-logo-pop w-full h-full" fill="none" aria-hidden="true">
-          <path
-            d="M48 16 a32 32 0 1 0 22.6 54.6 l-8.5 -8.5 a20 20 0 1 1 0 -28.3 l8.5 -8.5 A31.9 31.9 0 0 0 48 16 z"
-            fill="#FF82BE"
-            transform="translate(-4 4)"
-          />
-          <path
-            d="M48 16 a32 32 0 1 0 22.6 54.6 l-8.5 -8.5 a20 20 0 1 1 0 -28.3 l8.5 -8.5 A31.9 31.9 0 0 0 48 16 z"
-            fill="#FF008C"
-          />
-        </svg>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/brand/logo-c-art.svg"
+          alt=""
+          aria-hidden="true"
+          className="cc-logo-pop w-full h-full object-contain"
+        />
       </div>
 
       {/* Brand dot-grid accent, bottom-left, behind tiles. */}
