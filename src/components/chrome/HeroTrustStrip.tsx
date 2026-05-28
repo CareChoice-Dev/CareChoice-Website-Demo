@@ -24,7 +24,7 @@ export function HeroTrustStrip() {
         <p id="trust-strip-heading" className="eyebrow shrink-0">
           Registered. Accredited. Trusted.
         </p>
-        <ul className="flex flex-wrap items-center gap-3 md:gap-4 list-none p-0 m-0">
+        <ul className="flex-1 flex flex-wrap items-center justify-evenly gap-3 md:gap-4 list-none p-0 m-0">
           {STRIP_MARKS.map((mark) => (
             <li
               key={mark.src}
