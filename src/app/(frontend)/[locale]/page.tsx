@@ -9,6 +9,7 @@ import { StatsRow } from '@/components/blocks/StatsRow'
 import { NewsCardRow } from '@/components/blocks/NewsCardRow'
 import { Link } from '@/components/primitives/Link'
 import { AskCCTrigger } from '@/components/ask/AskCCTrigger'
+import { HeroBrandVisual } from '@/components/blocks/HeroBrandVisual'
 
 export default async function HomePage({
   params,
@@ -23,7 +24,7 @@ export default async function HomePage({
   return (
     <div className="flex flex-col gap-0">
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 pt-10 pb-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-start">
           <div className="flex flex-col gap-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight">
               Find the right home, support, and team. With confidence.
@@ -59,6 +60,7 @@ export default async function HomePage({
           <div className="flex flex-col gap-3">
             <p className="eyebrow text-cc-magenta">Ask CareChoice.</p>
             <AskCCTrigger variant="hero" />
+            <HeroBrandVisual />
           </div>
         </div>
       </div>

@@ -19,6 +19,22 @@
   }
 }
 
+/* Hero brand-visual staggered reveal. Disabled automatically by the global
+   prefers-reduced-motion / [data-reduce-motion] rules in tokens.css. */
+@keyframes cc-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cc-arc-draw {
+  from { opacity: 0; stroke-dashoffset: 620; }
+  to   { opacity: 1; stroke-dashoffset: 0; }
+}
+.cc-rise { animation: cc-rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.cc-arc-draw {
+  stroke-dasharray: 620;
+  animation: cc-arc-draw 1.1s ease-out 0.1s both;
+}
+
 /* Ask CareChoice panel pushes desktop content instead of overlaying it
    (mobile keeps the full-width modal pattern). */
 body {
