@@ -60,19 +60,22 @@ export function HeroBrandVisual() {
       aria-hidden="true"
       className="relative hidden lg:block mt-6 min-h-[340px] select-none"
     >
-      {/* Magenta "C" arc — the logo motif, swept behind the tiles. */}
-      <svg
-        viewBox="0 0 200 200"
-        className="absolute -top-4 right-0 w-[300px] h-[300px] z-0"
-        fill="none"
-        stroke="var(--cc-magenta)"
-        strokeWidth="16"
-        strokeLinecap="round"
-        aria-hidden="true"
-      >
-        <path className="cc-arc-draw" d="M155 45 A78 78 0 1 0 155 155" />
-        <circle cx="150" cy="100" r="11" fill="var(--cc-magenta)" stroke="none" />
-      </svg>
+      {/* Official CareChoice "C" mark (public/brand/mark-c.svg), inlined so the
+          load-in animation can run. Two layers: a #FF82BE offset shadow behind
+          the #FF008C mark. Floats gently after a scale-in pop. */}
+      <div className="cc-logo-float absolute -top-2 right-0 z-0 w-[200px] h-[200px]">
+        <svg viewBox="0 0 96 96" className="cc-logo-pop w-full h-full" fill="none" aria-hidden="true">
+          <path
+            d="M48 16 a32 32 0 1 0 22.6 54.6 l-8.5 -8.5 a20 20 0 1 1 0 -28.3 l8.5 -8.5 A31.9 31.9 0 0 0 48 16 z"
+            fill="#FF82BE"
+            transform="translate(-4 4)"
+          />
+          <path
+            d="M48 16 a32 32 0 1 0 22.6 54.6 l-8.5 -8.5 a20 20 0 1 1 0 -28.3 l8.5 -8.5 A31.9 31.9 0 0 0 48 16 z"
+            fill="#FF008C"
+          />
+        </svg>
+      </div>
 
       {/* Brand dot-grid accent, bottom-left, behind tiles. */}
       <div
