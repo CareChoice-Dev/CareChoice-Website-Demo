@@ -103,6 +103,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Keep keyboard-scrolled targets clear of the sticky header (WCAG 2.4.11 Focus
+   Not Obscured). Header is ~135px total; 9rem (144px) buys some slack. */
+html {
+  scroll-padding-top: 9rem;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--cc-font-sans);
   font-weight: var(--cc-w-bold);

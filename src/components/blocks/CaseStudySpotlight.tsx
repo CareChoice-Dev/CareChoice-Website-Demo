@@ -10,6 +10,11 @@ interface PopulatedMedia {
   alt?: string | null
 }
 
+interface OutcomeMetric {
+  label?: string
+  value?: string
+}
+
 interface CaseStudyDoc {
   id: number | string
   title: string
@@ -18,6 +23,7 @@ interface CaseStudyDoc {
   summary?: string
   quote?: string
   heroImage?: PopulatedMedia | number | string | null
+  outcomeMetrics?: OutcomeMetric[]
 }
 
 export async function CaseStudySpotlight({
@@ -43,6 +49,13 @@ export async function CaseStudySpotlight({
       ? (story.heroImage as PopulatedMedia)
       : null
 
+  // Salesforce-style bold metric callout. Pick the first outcome metric with
+  // both a value and label; falls back to nothing if none recorded.
+  const metric = (story.outcomeMetrics ?? []).find(
+    (m): m is { value: string; label: string } =>
+      typeof m?.value === 'string' && m.value.length > 0 && typeof m?.label === 'string' && m.label.length > 0,
+  )
+
   return (
     <NextLink
       href={`${hrefPrefix}/case-studies/${story.slug}`}
@@ -66,19 +79,29 @@ export async function CaseStudySpotlight({
           )}
         </div>
         <div className="p-8 md:p-12 flex flex-col gap-4 bg-cc-white">
-          {story.participantName && (
-            <span className="eyebrow">{story.participantName}&apos;s story.</span>
+          <span className="eyebrow text-cc-magenta">
+            Featured story{story.participantName ? ` · ${story.participantName}.` : '.'}
+          </span>
+          {metric && (
+            <div className="flex flex-col gap-1 border-l-4 border-cc-magenta pl-4 -mt-1">
+              <span className="text-5xl md:text-6xl font-bold leading-none tracking-tight text-cc-black">
+                {metric.value}
+              </span>
+              <span className="font-semibold text-base text-cc-black/80">
+                {metric.label}
+              </span>
+            </div>
           )}
-          <h3 className="text-3xl md:text-5xl font-bold leading-tight tracking-tight">
+          <h3 className="text-2xl md:text-3xl font-bold leading-tight tracking-tight">
             {story.title}
           </h3>
           {story.quote && (
-            <p className="text-xl italic leading-relaxed border-l-4 border-cc-magenta pl-4">
+            <p className="text-lg italic leading-relaxed text-cc-fg-muted">
               {story.quote}
             </p>
           )}
           {story.summary && !story.quote && (
-            <p className="text-lg leading-relaxed">{story.summary}</p>
+            <p className="text-base leading-relaxed">{story.summary}</p>
           )}
           <span className="mt-auto pt-2 font-semibold underline">Read the full story ▸</span>
         </div>

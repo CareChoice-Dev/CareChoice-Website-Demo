@@ -11,6 +11,7 @@ import { NewsCardRow } from '@/components/blocks/NewsCardRow'
 import { Link } from '@/components/primitives/Link'
 import { Reveal } from '@/components/primitives/Reveal'
 import { AskCCTrigger } from '@/components/ask/AskCCTrigger'
+import { HeroTrustStrip } from '@/components/chrome/HeroTrustStrip'
 
 const HOW_IT_WORKS = [
   {
@@ -81,6 +82,8 @@ export default async function HomePage({
           </div>
         </div>
       </div>
+
+      <HeroTrustStrip />
 
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-10 w-full">
         <AudiencePathways locale={locale} />

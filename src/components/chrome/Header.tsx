@@ -39,7 +39,7 @@ export async function Header({ locale }: { locale: PayloadLocale }) {
   const hrefPrefix = `/${currentSlug}`
 
   return (
-    <header className="relative border-b-2 border-cc-black bg-cc-white">
+    <header className="sticky top-0 z-30 border-b-2 border-cc-black bg-cc-white">
       <div className="border-b border-cc-black/15 bg-cc-surface-pink/40">
         <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-2 flex items-center justify-end gap-3">
           <AskCCTrigger variant="header-icon" />
