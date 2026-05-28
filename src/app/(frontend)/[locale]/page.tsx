@@ -39,43 +39,45 @@ export default async function HomePage({
 
   return (
     <div className="flex flex-col gap-0">
-      <div className="max-w-[1280px] mx-auto px-6 md:px-8 pt-10 pb-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-start">
-          <div className="flex flex-col gap-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight">
-              Find the right home, support, and team. With confidence.
-            </h1>
-            <p className="text-lg leading-relaxed max-w-prose">
-              For thirty years CareChoice has supported people with disability across Australia —
-              in their homes, in our homes, and out in their communities. Ask us anything.
-            </p>
-            <p className="flex items-start gap-2 text-sm border-l-4 border-cc-magenta bg-cc-surface-pink/60 px-3 py-2 max-w-prose">
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="w-4 h-4 mt-0.5 shrink-0 text-cc-magenta"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v8M8 12h8" />
-              </svg>
-              <span>
-                <span className="font-semibold">Make this site work for you.</span> Change text
-                size, contrast, dyslexia-friendly font, motion, or switch to{' '}
-                <Link href="/easy-read" className="underline font-semibold">
-                  Easy Read
-                </Link>{' '}
-                — controls in the bar above.
-              </span>
-            </p>
-          </div>
-          <div className="flex flex-col gap-3 bg-cc-surface-pink p-6 md:p-8">
-            <p className="eyebrow text-cc-magenta">Ask CareChoice.</p>
-            <AskCCTrigger variant="hero" />
+      <div className="bg-cc-surface-pink">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-8 pt-10 pb-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-start">
+            <div className="flex flex-col gap-6">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight">
+                Find the right home, support, and team. With confidence.
+              </h1>
+              <p className="text-lg leading-relaxed max-w-prose">
+                For thirty years CareChoice has supported people with disability across Australia —
+                in their homes, in our homes, and out in their communities. Ask us anything.
+              </p>
+              <p className="flex items-start gap-2 text-sm border-l-4 border-cc-magenta bg-cc-white px-3 py-2 max-w-prose">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="w-4 h-4 mt-0.5 shrink-0 text-cc-magenta"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 8v8M8 12h8" />
+                </svg>
+                <span>
+                  <span className="font-semibold">Make this site work for you.</span> Change text
+                  size, contrast, dyslexia-friendly font, motion, or switch to{' '}
+                  <Link href="/easy-read" className="underline font-semibold">
+                    Easy Read
+                  </Link>{' '}
+                  — controls in the bar above.
+                </span>
+              </p>
+            </div>
+            <div className="flex flex-col gap-3">
+              <p className="eyebrow text-cc-magenta">Ask CareChoice.</p>
+              <AskCCTrigger variant="hero" />
+            </div>
           </div>
         </div>
       </div>
